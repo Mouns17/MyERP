@@ -12,6 +12,13 @@
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/WindowControlButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Border Background="White">
         <Grid>
@@ -59,7 +66,26 @@
                         Text="Учет поставок и продаж" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <!--  Свернуть  -->
+                    <Button
+                        Click="MinimizeButton_Click"
+                        Content="—"
+                        Style="{DynamicResource WindowControlButtonStyle}" />
+
+                    <!--  Развернуть  -->
+                    <Button
+                        x:Name="MaximizeButton"
+                        Click="MaximizeButton_Click"
+                        Content="□"
+                        Style="{StaticResource WindowControlButtonStyle}" />
+
+                    <!--  Закрыть  -->
+                    <Button
+                        Click="CloseButton_Click"
+                        Content="✕"
+                        Style="{StaticResource WindowControlButtonStyle}" />
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
