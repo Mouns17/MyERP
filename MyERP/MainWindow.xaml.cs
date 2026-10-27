@@ -65,5 +65,10 @@ namespace TradeEnterprise
         {
 
         }
+
+        private void Пользователи_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
