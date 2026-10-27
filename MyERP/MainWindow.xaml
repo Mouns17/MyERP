@@ -87,31 +87,107 @@
                         Style="{StaticResource WindowControlButtonStyle}" />
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Background="#EAE6CA">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Background="#EAE6CA">
 
 
-                    <StackPanel Grid.Column="0" Margin="10,0,10,0">
-                        <TextBlock
-                            Margin="10,13"
-                            HorizontalAlignment="Left"
-                            FontFamily="Segoe UI Black"
-                            FontSize="10"
-                            Foreground="Gray"
-                            Text="РАЗДЕЛЫ" />
+                <StackPanel Grid.Column="0" Margin="10,0,10,0">
+                    <TextBlock
+                        Margin="10,13"
+                        HorizontalAlignment="Left"
+                        FontFamily="Segoe UI Black"
+                        FontSize="10"
+                        Foreground="Gray"
+                        Text="РАЗДЕЛЫ" />
+                </StackPanel>
 
-                        <Button x:Name="Обзор" />
-                        <Button x:Name="Товары" />
-                        <Button x:Name="Поставки" />
-                        <Button x:Name="Продажи" />
-                        <Button x:Name="Склады" />
-                        <Button x:Name="Отчеты" />
-
-                    </StackPanel>
-                </Border>
+                <StackPanel Grid.Column="1" Margin="10,0,10,0">
+                    <Button
+                        x:Name="Обзор"
+                        Width="100"
+                        Height="40"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Обзор_Click"
+                        Content="ОБЗОР"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Товары"
+                        Width="100"
+                        Height="40"
+                        Margin="100,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Товары_Click"
+                        Content="ТОВАРЫ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Поставки"
+                        Width="100"
+                        Height="40"
+                        Margin="200,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Поставки_Click"
+                        Content="ПОСТАВКИ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Продажи"
+                        Width="100"
+                        Height="40"
+                        Margin="300,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Продажи_Click"
+                        Content="ПРОДАЖИ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Склады"
+                        Width="100"
+                        Height="40"
+                        Margin="400,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Склады_Click"
+                        Content="СКЛАДЫ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Логи"
+                        Width="100"
+                        Height="40"
+                        Margin="500,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Логи_Click"
+                        Content="ЛОГИ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                    <Button
+                        x:Name="Пользователи"
+                        Width="110"
+                        Height="40"
+                        Margin="600,-40,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Content="ПОЛЬЗОВАТЕЛИ"
+                        FontFamily="Segoe UI Black"
+                        Foreground="#151719" />
+                </StackPanel>
             </Grid>
 
             <Grid Grid.Row="2">

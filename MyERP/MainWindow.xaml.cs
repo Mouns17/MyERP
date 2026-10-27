@@ -35,5 +35,35 @@ namespace TradeEnterprise
         {
             Close();
         }
+
+        private void Обзор_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Товары_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Поставки_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Продажи_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Склады_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Логи_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
