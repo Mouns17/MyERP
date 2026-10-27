@@ -8,7 +8,7 @@
     MinHeight="700"
     AllowsTransparency="True"
     Background="Transparent"
-    FontFamily="Ari"
+    FontFamily="Segoe UI"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None">
@@ -20,7 +20,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border Background="White">
+    <Border Background="#edeeef">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
@@ -28,7 +28,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="White">
+            <Grid Grid.Row="0" Background="#151719">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -39,20 +39,20 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Background="Transparent"
-                    BorderBrush="Gray"
-                    BorderThickness="0,0,0,0.5" />
+                    BorderBrush="#F5FFFA"
+                    BorderThickness="0,0,0,1" />
                 <Border
                     Grid.Row="0"
                     Grid.Column="1"
                     Background="Transparent"
-                    BorderBrush="Gray"
-                    BorderThickness="0,0,0,0.5" />
+                    BorderBrush="#F5FFFA"
+                    BorderThickness="0,0,0,1" />
                 <Border
                     Grid.Row="0"
                     Grid.Column="2"
                     Background="Transparent"
-                    BorderBrush="Gray"
-                    BorderThickness="0,0,0,0.5" />
+                    BorderBrush="#F5FFFA"
+                    BorderThickness="0,0,0,1" />
 
                 <StackPanel
                     Margin="20,0,0,0"
@@ -62,7 +62,7 @@
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="SemiBold"
-                        Foreground="Black"
+                        Foreground="White"
                         Text="Учет поставок и продаж" />
                 </StackPanel>
 
@@ -89,9 +89,36 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Border Background="#EAE6CA">
 
+
+                    <StackPanel Grid.Column="0" Margin="10,0,10,0">
+                        <TextBlock
+                            Margin="10,13"
+                            HorizontalAlignment="Left"
+                            FontFamily="Segoe UI Black"
+                            FontSize="10"
+                            Foreground="Gray"
+                            Text="РАЗДЕЛЫ" />
+
+                        <Button x:Name="Обзор" />
+                        <Button x:Name="Товары" />
+                        <Button x:Name="Поставки" />
+                        <Button x:Name="Продажи" />
+                        <Button x:Name="Склады" />
+                        <Button x:Name="Отчеты" />
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Border
+                    Margin="20"
+                    Background="#EAE6CA"
+                    CornerRadius="30" />
             </Grid>
         </Grid>
     </Border>
