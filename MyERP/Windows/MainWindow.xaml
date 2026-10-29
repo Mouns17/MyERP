@@ -32,19 +32,19 @@
                     Grid.Column="0"
                     Background="Transparent"
                     BorderBrush="#DCDCDC"
-                    BorderThickness="0,0,0,1" />
+                    BorderThickness="0,0,0,2" />
                 <Border
                     Grid.Row="0"
                     Grid.Column="1"
                     Background="Transparent"
                     BorderBrush="#DCDCDC"
-                    BorderThickness="0,0,0,1" />
+                    BorderThickness="0,0,0,2" />
                 <Border
                     Grid.Row="0"
                     Grid.Column="2"
                     Background="Transparent"
                     BorderBrush="#DCDCDC"
-                    BorderThickness="0,0,0,1" />
+                    BorderThickness="0,0,0,2" />
 
                 <StackPanel
                     Margin="20,0,0,0"
@@ -68,7 +68,7 @@
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="Иванов И.И" />
+                        Text="Здесь будет имя пользователя" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -109,88 +109,85 @@
                         Text="РАЗДЕЛЫ" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Margin="10,0,10,0">
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,10,0"
+                    Orientation="Horizontal">
                     <Button
                         x:Name="Обзор"
-                        Width="100"
+                        Width="130"
                         Height="40"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Обзор_Click"
-                        Content="ОБЗОР"
+                        Content="🔎 ОБЗОР"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Товары"
-                        Width="100"
+                        Width="130"
                         Height="40"
-                        Margin="100,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Товары_Click"
-                        Content="ТОВАРЫ"
+                        Content="🏷️ ТОВАРЫ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Поставки"
-                        Width="100"
+                        Width="130"
                         Height="40"
-                        Margin="200,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Поставки_Click"
-                        Content="ПОСТАВКИ"
+                        Content="📥 ПОСТАВКИ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Продажи"
-                        Width="100"
+                        Width="130"
                         Height="40"
-                        Margin="300,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Продажи_Click"
-                        Content="ПРОДАЖИ"
+                        Content="🛒 ПРОДАЖИ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Склады"
-                        Width="100"
+                        Width="130"
                         Height="40"
-                        Margin="400,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Склады_Click"
-                        Content="СКЛАДЫ"
+                        Content="📦 СКЛАДЫ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Логи"
-                        Width="100"
+                        Width="130"
                         Height="40"
-                        Margin="500,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Логи_Click"
-                        Content="ЛОГИ"
+                        Content="🗃️ ЛОГИ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                     <Button
                         x:Name="Пользователи"
-                        Width="110"
+                        Width="130"
                         Height="40"
-                        Margin="600,-40,0,0"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="Пользователи_Click"
-                        Content="ПОЛЬЗОВАТЕЛИ"
+                        Content="👤 ПОЛЬЗОВАТЕЛИ"
                         FontFamily="Segoe UI Black"
                         Foreground="#151719" />
                 </StackPanel>

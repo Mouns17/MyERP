@@ -48,7 +48,7 @@ namespace MyERP.Windows
 
         private void Поставки_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new Pages.SuppliesPage());
         }
 
         private void Продажи_Click(object sender, RoutedEventArgs e)
