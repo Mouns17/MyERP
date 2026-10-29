@@ -9,7 +9,7 @@
         BasedOn="{StaticResource WindowControlButtonStyle}"
         TargetType="{x:Type Button}">
 
-        <Setter Property="Foreground" Value="#333333" />
+        <Setter Property="Foreground" Value="White" />
 
         <Setter Property="Template">
             <Setter.Value>
