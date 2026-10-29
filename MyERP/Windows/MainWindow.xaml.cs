@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace TradeEnterprise
+namespace MyERP.Windows
 {
     public partial class MainWindow : Window
     {
@@ -43,7 +43,7 @@ namespace TradeEnterprise
 
         private void Товары_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new Pages.ProductsPage());
         }
 
         private void Поставки_Click(object sender, RoutedEventArgs e)
