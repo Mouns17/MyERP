@@ -12,7 +12,83 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,20"
+            FontFamily="Segoe UI Black"
+            FontSize="20"
+            Foreground="#151719"
+            Text="ТОВАРЫ" />
+
+        <Border
+            Grid.Row="2"
+            Margin="0,10,0,0"
+            Background="Transparent"
+            BorderBrush="#DCDCDC"
+            BorderThickness="0,0,0,2" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="8"
+                BorderBrush="#151719"
+                Foreground="#151719"
+                Text="Поиск..." />
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Content="Фильтры" />
+                <Button
+                    Margin="10,0,0,0"
+                    Content="ДОБАВИТЬ"
+                    FontFamily="Segoe UI Black" />
+                <Button
+                    Margin="10,0,0,0"
+                    Content="ИМПОРТ"
+                    FontFamily="Segoe UI Black" />
+            </StackPanel>
+        </Grid>
+
+        <DataGrid
+            x:Name="ProductsDataGrid"
+            Grid.Row="3"
+            Margin="0,10,0,0"
+            BorderBrush="#151719"
+            ColumnHeaderHeight="40"
+            RowHeight="36">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding Id}"
+                    Header="ID" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Name}"
+                    Header="Наименование" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding SKU}"
+                    Header="Артикул" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding Price}"
+                    Header="Цена" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>
