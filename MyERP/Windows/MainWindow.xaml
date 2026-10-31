@@ -20,7 +20,10 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="#151719">
+            <Grid
+                Grid.Row="0"
+                Background="#151719"
+                MouseLeftButtonDown="WindowHeader_MouseLeftButtonDown">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

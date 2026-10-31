@@ -12,7 +12,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -24,65 +23,39 @@
             Foreground="#151719"
             Text="ПОСТАВКИ" />
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <TextBox
-                Grid.Column="0"
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button
                 Padding="8"
+                Background="Transparent"
                 BorderBrush="#151719"
-                Text="Поиск..." />
-
-            <StackPanel
-                Grid.Column="1"
-                Margin="10,0,0,0"
-                Orientation="Horizontal">
-                <Button Content="ДОБАВИТЬ" />
-            </StackPanel>
+                BorderThickness="1,1,1,0"
+                Click="Button_Click"
+                Content="Поставки" />
+            <Button
+                Padding="8"
+                Background="Transparent"
+                BorderBrush="#151719"
+                BorderThickness="1,1,1,0"
+                Click="Button_Click_1"
+                Content="Поставщики" />
+            <Button
+                Padding="8"
+                Background="Transparent"
+                BorderBrush="#151719"
+                BorderThickness="1,1,1,0"
+                Click="Button_Click_2"
+                Content="Заказ поставщику" />
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <Border
+                Background="Transparent"
+                BorderBrush="#151719"
+                BorderThickness="1">
+                <Frame
+                    x:Name="SuppliesFrame"
+                    Background="Transparent"
+                    NavigationUIVisibility="Hidden" />
+            </Border>
         </Grid>
-        <DataGrid
-            x:Name="SuppliesDataGrid"
-            Grid.Row="3"
-            Margin="0,10,0,0"
-            AutoGenerateColumns="False"
-            BorderBrush="#151719"
-            CanUserAddRows="False"
-            ColumnHeaderHeight="40"
-            IsReadOnly="True"
-            RowHeight="36">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Id}"
-                    Header="№" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Поставщик}"
-                    Header="Поставщик" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Склад}"
-                    Header="Склад" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Товар}"
-                    Header="Товар" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Количество}"
-                    Header="Количество" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Цена}"
-                    Header="Закупочная цена" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Статус}"
-                    Header="Статус" />
-            </DataGrid.Columns>
-        </DataGrid>
     </Grid>
 </Page>
