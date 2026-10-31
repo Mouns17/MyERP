@@ -30,27 +30,27 @@
                     Binding="{Binding Id}"
                     Header="№" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="200"
                     Binding="{Binding Поставщик}"
                     Header="Поставщик" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="150"
                     Binding="{Binding Склад}"
                     Header="Склад" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="150"
                     Binding="{Binding Товар}"
                     Header="Товар" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="100"
                     Binding="{Binding Количество}"
                     Header="Количество" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="150"
                     Binding="{Binding Цена}"
                     Header="Закупочная цена" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
                     Binding="{Binding Статус}"
                     Header="Статус" />
             </DataGrid.Columns>

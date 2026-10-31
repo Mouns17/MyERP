@@ -28,14 +28,14 @@
                 Padding="8"
                 Background="Transparent"
                 BorderBrush="#151719"
-                BorderThickness="1,1,1,0"
+                BorderThickness="1,1,0,0"
                 Click="Button_Click"
                 Content="Поставки" />
             <Button
                 Padding="8"
                 Background="Transparent"
                 BorderBrush="#151719"
-                BorderThickness="1,1,1,0"
+                BorderThickness="1,1,0,0"
                 Click="Button_Click_1"
                 Content="Поставщики" />
             <Button
@@ -46,6 +46,7 @@
                 Click="Button_Click_2"
                 Content="Заказ поставщику" />
         </StackPanel>
+
         <Grid Grid.Row="2">
             <Border
                 Background="Transparent"

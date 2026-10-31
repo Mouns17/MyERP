@@ -27,26 +27,32 @@
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="Auto"
+                    MinWidth="5"
                     Binding="{Binding Id}"
                     Header="№" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="200"
+                    MinWidth="30"
                     Binding="{Binding Наименование}"
                     Header="Наименование" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="200"
+                    MinWidth="50"
                     Binding="{Binding ИНН}"
                     Header="ИНН" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="120"
+                    MinWidth="20"
                     Binding="{Binding Телефон}"
                     Header="Телефон" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="180"
+                    MinWidth="30"
                     Binding="{Binding ЭлПочта}"
                     Header="Эл. Почта" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
+                    MinWidth="50"
                     Binding="{Binding Адрес}"
                     Header="Адрес" />
             </DataGrid.Columns>
