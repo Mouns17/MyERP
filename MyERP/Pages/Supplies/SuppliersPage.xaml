@@ -15,6 +15,50 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="8"
+                Background="White"
+                BorderBrush="#D0D0D0"
+                Foreground="#151719"
+                Text="Поиск..." />
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="AddSupplierButton_Click"
+                    Content="ДОБАВИТЬ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    x:Name="SaveProductButton"
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="SaveSupplierButton_Click"
+                    Content="СОХРАНИТЬ"
+                    FontWeight="SemiBold"
+                    Visibility="Collapsed" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Content="ИМПОРТ"
+                    FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+
         <DataGrid
             x:Name="SuppliersDataGrid"
             Grid.Row="1"
@@ -31,16 +75,16 @@
             CanUserResizeRows="False"
             CanUserSortColumns="True"
             ColumnHeaderHeight="40"
-            Focusable="False"
+            Focusable="True"
             Foreground="#151719"
             GridLinesVisibility="All"
             HeadersVisibility="Column"
             HorizontalGridLinesBrush="#E5E5E5"
-            IsReadOnly="True"
+            IsReadOnly="False"
             RowBackground="#FFFAF0"
             RowHeight="25"
             SelectionMode="Single"
-            SelectionUnit="FullRow"
+            SelectionUnit="CellOrRowHeader"
             VerticalGridLinesBrush="#E5E5E5">
 
             <DataGrid.RowStyle>
@@ -48,7 +92,6 @@
                     <Setter Property="Background" Value="#FFFAF0" />
                     <Setter Property="Foreground" Value="#151719" />
                     <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="IsHitTestVisible" Value="False" />
                     <Setter Property="FontWeight" Value="SemiBold" />
                     <Setter Property="FontSize" Value="13" />
                 </Style>
@@ -78,7 +121,8 @@
                 <DataGridTextColumn
                     Width="60"
                     Binding="{Binding Id}"
-                    Header="№">
+                    Header="№"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Center" />

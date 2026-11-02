@@ -15,6 +15,52 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!--  Панель управления  -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="8"
+                Background="White"
+                BorderBrush="#D0D0D0"
+                Foreground="#151719"
+                Text="Поиск..." />
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="AddSuppliesButton_Click"
+                    Content="ДОБАВИТЬ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    x:Name="SaveSuppliesButton"
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="SaveSuppliesButton_Click"
+                    Content="СОХРАНИТЬ"
+                    FontWeight="SemiBold"
+                    Visibility="Collapsed" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="Button_Click"
+                    Content="ИМПОРТ"
+                    FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+
         <DataGrid
             x:Name="SuppliesDataGrid"
             Grid.Row="1"
@@ -31,16 +77,16 @@
             CanUserResizeRows="False"
             CanUserSortColumns="True"
             ColumnHeaderHeight="40"
-            Focusable="False"
+            Focusable="True"
             Foreground="#151719"
             GridLinesVisibility="All"
             HeadersVisibility="Column"
             HorizontalGridLinesBrush="#E5E5E5"
-            IsReadOnly="True"
+            IsReadOnly="False"
             RowBackground="#FFFAF0"
             RowHeight="25"
             SelectionMode="Single"
-            SelectionUnit="FullRow"
+            SelectionUnit="CellOrRowHeader"
             VerticalGridLinesBrush="#E5E5E5">
 
             <DataGrid.RowStyle>
@@ -48,7 +94,6 @@
                     <Setter Property="Background" Value="#FFFAF0" />
                     <Setter Property="Foreground" Value="#151719" />
                     <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="IsHitTestVisible" Value="False" />
                     <Setter Property="FontWeight" Value="SemiBold" />
                     <Setter Property="FontSize" Value="13" />
                 </Style>
@@ -78,47 +123,70 @@
                 <DataGridTextColumn
                     Width="50"
                     Binding="{Binding Id}"
-                    Header="№">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="TextAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn
+                    Header="№"
+                    IsReadOnly="True" />
+                <DataGridComboBoxColumn
+                    x:Name="SupplierColumn"
                     Width="*"
-                    MinWidth="200"
-                    Binding="{Binding Поставщик}"
-                    Header="Поставщик" />
-                <DataGridTextColumn
+                    DisplayMemberPath="Наименование"
+                    Header="Поставщик"
+                    SelectedValueBinding="{Binding id_поставщика, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="Id" />
+                <DataGridTemplateColumn Width="120" Header="Дата поставки">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Дата, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                SelectedDate="{Binding Дата, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedDateFormat="Short" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridComboBoxColumn
+                    x:Name="WarehouseColumn"
                     Width="150"
-                    Binding="{Binding Склад}"
-                    Header="Склад" />
+                    DisplayMemberPath="Наименование"
+                    Header="Склад"
+                    SelectedValueBinding="{Binding id_склада, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="Id" />
+                <DataGridComboBoxColumn
+                    x:Name="ProductColumn"
+                    Width="150"
+                    DisplayMemberPath="Наименование"
+                    Header="Товар"
+                    SelectedValueBinding="{Binding id_товара, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="Id" />
                 <DataGridTextColumn
-                    Width="200"
-                    Binding="{Binding Товар}"
-                    Header="Товар" />
-                <DataGridTextColumn
-                    Width="125"
-                    Binding="{Binding Количество}"
+                    Width="100"
+                    Binding="{Binding Количество, UpdateSourceTrigger=PropertyChanged}"
                     Header="Количество" />
                 <DataGridTextColumn
-                    Width="150"
-                    Binding="{Binding Цена, StringFormat={}{0:N2}}"
+                    Width="140"
+                    Binding="{Binding Цена, StringFormat={}{0:N2}, UpdateSourceTrigger=PropertyChanged}"
                     Header="Закупочная цена" />
-                <DataGridTemplateColumn Width="100" Header="Валюта">
+                <DataGridTemplateColumn Width="70" Header="Валюта">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Margin="3,0,0,0" Text="RUB ₽" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding Статус}"
-                    Header="Статус" />
+                <DataGridComboBoxColumn
+                    x:Name="StatusColumn"
+                    Width="80"
+                    DisplayMemberPath="Наименование"
+                    Header="Статус"
+                    SelectedValueBinding="{Binding id_статуса, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="Id" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

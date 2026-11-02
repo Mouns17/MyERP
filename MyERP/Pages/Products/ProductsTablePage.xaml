@@ -15,7 +15,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Панель управления  -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" />
@@ -82,7 +81,6 @@
             </StackPanel>
         </Grid>
 
-        <!--  Таблица товаров  -->
         <DataGrid
             x:Name="ProductsDataGrid"
             Grid.Row="1"

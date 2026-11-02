@@ -40,7 +40,7 @@
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="ERP | Учет поставок и продаж в торговой фирме" />
+                        Text="MyERP | Учет поставок и продаж в торговой фирме" />
                 </StackPanel>
 
                 <StackPanel

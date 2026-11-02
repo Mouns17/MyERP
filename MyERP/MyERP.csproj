@@ -123,6 +123,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +136,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\DataBaseClass.cs" />
+    <Compile Include="Classes\UserSession.cs" />
     <Compile Include="Pages\ProductsPage.xaml.cs">
       <DependentUpon>ProductsPage.xaml</DependentUpon>
     </Compile>
@@ -155,6 +160,9 @@
     </Compile>
     <Compile Include="Pages\Supplies\WarehousesPage.xaml.cs">
       <DependentUpon>WarehousesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
