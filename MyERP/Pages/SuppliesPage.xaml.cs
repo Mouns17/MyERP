@@ -33,5 +33,10 @@ namespace MyERP.Pages
         {
             SuppliesFrame.Navigate(new Supplies.OrderSupplierPage());
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            SuppliesFrame.Navigate(new Supplies.WarehousesPage());
+        }
     }
 }

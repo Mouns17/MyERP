@@ -146,17 +146,6 @@
                         FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
-                        x:Name="Склады"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Склады_Click"
-                        Content="📦 СКЛАДЫ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
                         x:Name="Логи"
                         Width="130"
                         Height="37"

@@ -59,11 +59,6 @@ namespace MyERP.Windows
 
         }
 
-        private void Склады_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Логи_Click(object sender, RoutedEventArgs e)
         {
 
