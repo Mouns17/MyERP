@@ -1,0 +1,144 @@
+﻿<Page
+    x:Class="MyERP.Pages.Products.CategoriesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MyERP.Pages.Products"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="#FFFAF0"
+    FontFamily="Segoe UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Панель управления  -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="8"
+                Background="White"
+                BorderBrush="#D0D0D0"
+                Foreground="#151719"
+                Text="Поиск..." />
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="AddCategoryButton_Click"
+                    Content="ДОБАВИТЬ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    x:Name="SaveCategoryButton"
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="SaveCategoryButton_Click"
+                    Content="СОХРАНИТЬ"
+                    FontWeight="SemiBold"
+                    Visibility="Collapsed" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Content="ИМПОРТ"
+                    FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Таблица товаров  -->
+        <DataGrid
+            x:Name="CategoriesDataGrid"
+            Grid.Row="1"
+            Margin="0,10,0,0"
+            AlternatingRowBackground="#F5F2EA"
+            AutoGenerateColumns="False"
+            Background="#FFFAF0"
+            BorderBrush="#151719"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="False"
+            CanUserResizeRows="False"
+            CanUserSortColumns="True"
+            ColumnHeaderHeight="40"
+            Focusable="True"
+            Foreground="#151719"
+            GridLinesVisibility="All"
+            HeadersVisibility="Column"
+            HorizontalGridLinesBrush="#E5E5E5"
+            IsReadOnly="False"
+            RowBackground="#FFFAF0"
+            RowHeight="25"
+            SelectionMode="Single"
+            SelectionUnit="CellOrRowHeader"
+            VerticalGridLinesBrush="#E5E5E5">
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="#FFFAF0" />
+                    <Setter Property="Foreground" Value="#151719" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="FontSize" Value="13" />
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#DCDCDC" />
+                    <Setter Property="Foreground" Value="#151719" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Padding" Value="10,0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="BorderThickness" Value="0,0,1,1" />
+                    <Setter Property="BorderBrush" Value="#C5C5C5" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#CECECE" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="40"
+                    Binding="{Binding Id}"
+                    Header="№"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="*"
+                    MinWidth="200"
+                    Binding="{Binding Наименование, UpdateSourceTrigger=PropertyChanged}"
+                    Header="Наименование" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

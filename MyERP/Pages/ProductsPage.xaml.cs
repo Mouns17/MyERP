@@ -13,52 +13,20 @@ namespace MyERP.Pages
     /// </summary>
     public partial class ProductsPage : Page
     {
-        private DataTable productsTable;
         public ProductsPage()
         {
             InitializeComponent();
-            LoadProducts();
+            ProductsFrame.Navigate(new Products.ProductsTablePage());
         }
 
-        private void LoadProducts()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                using (MySqlConnection connection = DataBaseClass.GetConnection())
-                {
-                    connection.Open();
+            ProductsFrame.Navigate(new Products.ProductsTablePage());
+        }
 
-                    string query = @"
-                        SELECT
-                            t.id_товара AS Id,
-                            t.Артикул AS Артикул,
-                            t.Наименование AS Наименование,
-                            t.Цена AS Цена
-                        FROM ТОВАР AS t
-                        ORDER BY t.Наименование";
-
-                    using (MySqlCommand command =
-                           new MySqlCommand(query, connection))
-                    using (MySqlDataAdapter adapter =
-                           new MySqlDataAdapter(command))
-                    {
-                        productsTable = new DataTable();
-                        adapter.Fill(productsTable);
-
-                        ProductsDataGrid.ItemsSource =
-                            productsTable.DefaultView;
-                    }
-                }
-            }
-
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Не удалось загрузить товары:\n" + ex.Message,
-                    "Ошибка базы данных",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ProductsFrame.Navigate(new Products.CategoriesPage());
         }
     }
 }

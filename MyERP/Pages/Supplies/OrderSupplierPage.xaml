@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:MyERP.Pages.Supplies"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="#FFFAF0"
+    FontFamily="Segoe UI"
     mc:Ignorable="d">
 
     <Grid Margin="12">

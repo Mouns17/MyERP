@@ -95,6 +95,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Products\CategoriesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Products\ProductsTablePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SuppliesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +130,12 @@
     <Compile Include="Classes\DataBaseClass.cs" />
     <Compile Include="Pages\ProductsPage.xaml.cs">
       <DependentUpon>ProductsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Products\CategoriesPage.xaml.cs">
+      <DependentUpon>CategoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Products\ProductsTablePage.xaml.cs">
+      <DependentUpon>ProductsTablePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SuppliesPage.xaml.cs">
       <DependentUpon>SuppliesPage.xaml</DependentUpon>

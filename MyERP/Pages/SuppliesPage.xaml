@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:MyERP.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="#FFFAF0"
+    FontFamily="Segoe UI"
     mc:Ignorable="d">
 
     <Grid Margin="20">
@@ -30,21 +31,27 @@
                 BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click"
-                Content="Поставки" />
+                Content="Поставки"
+                FontSize="17"
+                FontWeight="SemiBold" />
             <Button
                 Padding="8"
                 Background="Transparent"
                 BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click_1"
-                Content="Поставщики" />
+                Content="Поставщики"
+                FontSize="17"
+                FontWeight="SemiBold" />
             <Button
                 Padding="8"
                 Background="Transparent"
                 BorderBrush="#151719"
                 BorderThickness="1,1,1,0"
                 Click="Button_Click_2"
-                Content="Заказ поставщику" />
+                Content="Заказ поставщику"
+                FontSize="17"
+                FontWeight="SemiBold" />
         </StackPanel>
 
         <Grid Grid.Row="2">
