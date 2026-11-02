@@ -97,7 +97,7 @@
                         Margin="10"
                         Background="#151719"
                         BorderBrush="Transparent"
-                        Click="Button_Click"
+                        Click="LoginButton_Click"
                         Content="ВОЙТИ"
                         FontFamily="Segoe UI Black"
                         FontSize="20"
