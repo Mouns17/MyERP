@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace MyERP.Windows
@@ -17,6 +10,7 @@ namespace MyERP.Windows
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.Navigate(new Pages.ProductsPage());
         }
 
         private void WindowHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

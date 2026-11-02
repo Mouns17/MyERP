@@ -53,7 +53,7 @@
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="Здесь будет имя пользователя" />
+                        Text="Администратор" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -110,7 +110,7 @@
                         BorderBrush="Transparent"
                         Click="Обзор_Click"
                         Content="🔎 ОБЗОР"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Товары"
@@ -121,7 +121,7 @@
                         BorderBrush="Transparent"
                         Click="Товары_Click"
                         Content="🏷️ ТОВАРЫ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Поставки"
@@ -132,7 +132,7 @@
                         BorderBrush="Transparent"
                         Click="Поставки_Click"
                         Content="📥 ПОСТАВКИ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Продажи"
@@ -143,7 +143,7 @@
                         BorderBrush="Transparent"
                         Click="Продажи_Click"
                         Content="🛒 ПРОДАЖИ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Склады"
@@ -154,7 +154,7 @@
                         BorderBrush="Transparent"
                         Click="Склады_Click"
                         Content="📦 СКЛАДЫ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Логи"
@@ -165,7 +165,7 @@
                         BorderBrush="Transparent"
                         Click="Логи_Click"
                         Content="🗃️ ЛОГИ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                     <Button
                         x:Name="Пользователи"
@@ -176,7 +176,7 @@
                         BorderBrush="Transparent"
                         Click="Пользователи_Click"
                         Content="👤 ПОЛЬЗОВАТЕЛИ"
-                        FontFamily="Segoe UI Black"
+                        FontWeight="Bold"
                         Foreground="#151719" />
                 </StackPanel>
             </Grid>

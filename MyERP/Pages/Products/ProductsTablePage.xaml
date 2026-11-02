@@ -51,7 +51,8 @@
                     FontSize="15"
                     FontWeight="SemiBold"
                     IsEnabled="True"
-                    SelectedValuePath="Id" />
+                    SelectedValuePath="Id"
+                    ToolTip="Категории" />
 
                 <ComboBox
                     x:Name="UnitComboBox"
@@ -61,7 +62,8 @@
                     FontSize="15"
                     FontWeight="SemiBold"
                     IsEnabled="True"
-                    SelectedValuePath="Id" />
+                    SelectedValuePath="Id"
+                    ToolTip="Единицы измерения" />
 
                 <Button
                     x:Name="SaveProductButton"
