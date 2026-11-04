@@ -161,5 +161,30 @@ VALUES
         {
 
         }
+
+        private void DeleteWarehouseButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SearchTextBox_TextChanged(
+            object sender, TextChangedEventArgs e)
+        {
+            if (warehousesTable == null)
+                return;
+
+            string search =
+                SearchTextBox.Text.Trim()
+                .Replace("'", "''")
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("*", "[*]");
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                warehousesTable.DefaultView.RowFilter = "";
+                return;
+            }
+        }
     }
 }

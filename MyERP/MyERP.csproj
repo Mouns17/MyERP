@@ -111,6 +111,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Supplies\OrderSupplier\CreateOrderSupplierPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Supplies\SuppliersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -151,6 +155,9 @@
     </Compile>
     <Compile Include="Pages\Supplies\OrderSupplierPage.xaml.cs">
       <DependentUpon>OrderSupplierPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Supplies\OrderSupplier\CreateOrderSupplierPage.xaml.cs">
+      <DependentUpon>CreateOrderSupplierPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Supplies\SuppliersPage.xaml.cs">
       <DependentUpon>SuppliersPage.xaml</DependentUpon>

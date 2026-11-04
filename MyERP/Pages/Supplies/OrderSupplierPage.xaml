@@ -15,21 +15,148 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            Margin="0,0,0,20"
-            FontFamily="Segoe UI Black"
-            FontSize="20"
-            Foreground="#151719"
-            Text="СОЗДАТЬ ЗАКАЗ" />
-
-        <Grid Grid.Row="1">
+        <!--  Панель управления  -->
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" />
+            <Grid Grid.Column="0">
+                <TextBox
+                    x:Name="SearchTextBox"
+                    Padding="8"
+                    VerticalContentAlignment="Center"
+                    Background="White"
+                    BorderBrush="#D0D0D0"
+                    Foreground="#151719"
+                    TextChanged="SearchTextBox_TextChanged" />
+
+                <TextBlock
+                    Margin="9,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="#999999"
+                    IsHitTestVisible="False"
+                    Text="Поиск заказа...">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="10,8"
+                    Click="OpenOrderButton_Click"
+                    Content="ОТКРЫТЬ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="10,8"
+                    Click="CreateOrderButton_Click"
+                    Content="СОЗДАТЬ ЗАКАЗ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="10,8"
+                    Click="CancelOrderButton_Click"
+                    Content="ОТМЕНИТЬ"
+                    FontWeight="SemiBold" />
+            </StackPanel>
         </Grid>
+
+        <!--  Список заказов  -->
+        <DataGrid
+            x:Name="SupplierOrdersDataGrid"
+            Grid.Row="1"
+            Margin="0,10,0,0"
+            AlternatingRowBackground="#F5F2EA"
+            AutoGenerateColumns="False"
+            Background="#FFFAF0"
+            BorderBrush="#151719"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserResizeRows="False"
+            ColumnHeaderHeight="40"
+            Foreground="#151719"
+            GridLinesVisibility="All"
+            HeadersVisibility="Column"
+            HorizontalGridLinesBrush="#E5E5E5"
+            IsReadOnly="True"
+            RowBackground="#FFFAF0"
+            RowHeight="30"
+            SelectionMode="Single"
+            SelectionUnit="FullRow"
+            VerticalGridLinesBrush="#E5E5E5">
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#DCDCDC" />
+                    <Setter Property="Foreground" Value="#151719" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Padding" Value="10,0" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="BorderThickness" Value="0,0,1,1" />
+                    <Setter Property="BorderBrush" Value="#C5C5C5" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="55"
+                    Binding="{Binding Id}"
+                    Header="№" />
+
+                <DataGridTextColumn
+                    Width="*"
+                    MinWidth="180"
+                    Binding="{Binding Поставщик}"
+                    Header="Поставщик" />
+
+                <DataGridTextColumn
+                    Width="120"
+                    Binding="{Binding ДатаЗаказа, StringFormat={}{0:dd.MM.yyyy}}"
+                    Header="Дата заказа" />
+
+                <DataGridTextColumn
+                    Width="140"
+                    Binding="{Binding ОжидаемаяДата, StringFormat={}{0:dd.MM.yyyy}}"
+                    Header="Ожидаемая поставка" />
+
+                <DataGridTextColumn
+                    Width="160"
+                    Binding="{Binding Склад}"
+                    Header="Склад" />
+
+                <DataGridTextColumn
+                    Width="130"
+                    Binding="{Binding Сумма, StringFormat={}{0:N2}}"
+                    Header="Сумма" />
+
+                <DataGridTextColumn
+                    Width="150"
+                    Binding="{Binding Статус}"
+                    Header="Статус" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

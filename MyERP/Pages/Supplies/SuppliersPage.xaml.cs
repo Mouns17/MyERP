@@ -177,5 +177,30 @@ VALUES
 
             SaveProductButton.Visibility = Visibility.Visible;
         }
+
+        private void DeleteSupplierButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SearchTextBox_TextChanged(
+            object sender, TextChangedEventArgs e)
+        {
+            if (suppliersTable == null)
+                return;
+
+            string search =
+                SearchTextBox.Text.Trim()
+                .Replace("'", "''")
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("*", "[*]");
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                suppliersTable.DefaultView.RowFilter = "";
+                return;
+            }
+        }
     }
 }

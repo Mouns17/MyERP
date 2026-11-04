@@ -142,5 +142,25 @@ VALUES
 
             SaveCategoryButton.Visibility = Visibility.Visible;
         }
+
+        private void SearchTextBox_TextChanged(
+            object sender, TextChangedEventArgs e)
+        {
+            if (categoriesTable == null)
+                return;
+
+            string search =
+                SearchTextBox.Text.Trim()
+                .Replace("'", "''")
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("*", "[*]");
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                categoriesTable.DefaultView.RowFilter = "";
+                return;
+            }
+        }
     }
 }

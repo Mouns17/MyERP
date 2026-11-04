@@ -238,5 +238,25 @@ VALUES
                 }
             }
         }
+
+        private void SearchTextBox_TextChanged(
+            object sender, TextChangedEventArgs e)
+        {
+            if (productsTable == null)
+                return;
+
+            string search =
+                SearchTextBox.Text.Trim()
+                .Replace("'", "''")
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("*", "[*]");
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                productsTable.DefaultView.RowFilter = "";
+                return;
+            }
+        }
     }
 }

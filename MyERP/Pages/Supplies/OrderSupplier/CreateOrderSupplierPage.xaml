@@ -1,0 +1,261 @@
+﻿<Page
+    x:Class="MyERP.Pages.Supplies.OrderSupplier.CreateOrderSupplierPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MyERP.Pages.Supplies.OrderSupplier"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="#FFFAF0"
+    FontFamily="Segoe UI">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Заголовок и кнопка назад  -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Black"
+                FontSize="18"
+                Foreground="#151719"
+                Text="СОЗДАНИЕ ЗАКАЗА ПОСТАВЩИКУ" />
+
+            <Button
+                Grid.Column="1"
+                Padding="12,8"
+                Click="BackButton_Click"
+                Content="НАЗАД" />
+        </Grid>
+
+        <!--  Основная информация  -->
+        <Border
+            Grid.Row="1"
+            Padding="12"
+            BorderBrush="#D0D0D0"
+            BorderThickness="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <TextBlock FontWeight="SemiBold" Text="Поставщик" />
+                    <ComboBox
+                        x:Name="SupplierComboBox"
+                        Margin="0,6,0,0"
+                        Padding="6"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock FontWeight="SemiBold" Text="Склад" />
+                    <ComboBox
+                        x:Name="WarehouseComboBox"
+                        Margin="0,6,0,0"
+                        Padding="6"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                    <TextBlock FontWeight="SemiBold" Text="Дата заказа" />
+                    <DatePicker
+                        x:Name="OrderDatePicker"
+                        Margin="0,6,0,0"
+                        SelectedDateFormat="Short" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="3">
+                    <TextBlock FontWeight="SemiBold" Text="Ожидаемая поставка" />
+                    <DatePicker
+                        x:Name="ExpectedDatePicker"
+                        Margin="0,6,0,0"
+                        SelectedDateFormat="Short" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    Margin="0,12,0,0">
+
+                    <TextBlock FontWeight="SemiBold" Text="Комментарий" />
+                    <TextBox
+                        x:Name="CommentTextBox"
+                        MinHeight="32"
+                        Margin="0,6,0,0"
+                        Padding="7"
+                        AcceptsReturn="True"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Товары заказа  -->
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="15"
+                    Text="ТОВАРЫ ЗАКАЗА" />
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                    <Button
+                        Padding="10,7"
+                        Click="AddProductButton_Click"
+                        Content="ДОБАВИТЬ ТОВАР" />
+
+                    <Button
+                        Margin="8,0,0,0"
+                        Padding="10,7"
+                        Click="RemoveProductButton_Click"
+                        Content="УДАЛИТЬ" />
+                </StackPanel>
+            </Grid>
+
+            <DataGrid
+                x:Name="OrderProductsDataGrid"
+                Grid.Row="1"
+                AlternatingRowBackground="#F5F2EA"
+                AutoGenerateColumns="False"
+                Background="#FFFAF0"
+                BorderBrush="#151719"
+                BorderThickness="1"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeRows="False"
+                ColumnHeaderHeight="40"
+                Foreground="#151719"
+                GridLinesVisibility="All"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="#E5E5E5"
+                IsReadOnly="False"
+                RowBackground="#FFFAF0"
+                RowHeight="30"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                VerticalGridLinesBrush="#E5E5E5">
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#DCDCDC" />
+                        <Setter Property="Foreground" Value="#151719" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Padding" Value="10,0" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="BorderBrush" Value="#C5C5C5" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="50"
+                        Binding="{Binding Номер}"
+                        Header="№"
+                        IsReadOnly="True" />
+
+                    <DataGridComboBoxColumn
+                        x:Name="OrderProductColumn"
+                        Width="*"
+                        MinWidth="200"
+                        DisplayMemberPath="Наименование"
+                        Header="Товар"
+                        SelectedValueBinding="{Binding id_товара, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Id" />
+
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding Количество, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Количество" />
+
+                    <DataGridTextColumn
+                        Width="160"
+                        Binding="{Binding Цена, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2}}"
+                        Header="Закупочная цена" />
+
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Сумма, StringFormat={}{0:N2}}"
+                        Header="Сумма"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!--  Итог и кнопки  -->
+        <Grid Grid.Row="3" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="16"
+                    Text="ИТОГО:" />
+
+                <TextBlock
+                    x:Name="TotalAmountTextBlock"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="0,00 ₽" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                <Button
+                    Padding="12,9"
+                    Click="SaveDraftButton_Click"
+                    Content="СОХРАНИТЬ ЧЕРНОВИК" />
+
+                <Button
+                    Margin="8,0,0,0"
+                    Padding="12,9"
+                    Click="SaveOrderButton_Click"
+                    Content="СОЗДАТЬ ЗАКАЗ"
+                    FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

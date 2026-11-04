@@ -21,13 +21,34 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox
-                Grid.Column="0"
-                Padding="8"
-                Background="White"
-                BorderBrush="#D0D0D0"
-                Foreground="#151719"
-                Text="Поиск..." />
+            <Grid Grid.Column="0">
+                <TextBox
+                    x:Name="SearchTextBox"
+                    Padding="8"
+                    VerticalContentAlignment="Center"
+                    Background="White"
+                    BorderBrush="#D0D0D0"
+                    Foreground="#151719"
+                    TextChanged="SearchTextBox_TextChanged" />
+
+                <TextBlock
+                    Margin="9,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="#999999"
+                    IsHitTestVisible="False"
+                    Text="Поиск поставщика...">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <StackPanel
                 Grid.Column="1"
@@ -55,6 +76,13 @@
                     Margin="10,0,0,0"
                     Padding="8"
                     Content="ИМПОРТ"
+                    FontWeight="SemiBold" />
+
+                <Button
+                    Margin="10,0,0,0"
+                    Padding="8"
+                    Click="DeleteSupplierButton_Click"
+                    Content="УДАЛИТЬ"
                     FontWeight="SemiBold" />
             </StackPanel>
         </Grid>

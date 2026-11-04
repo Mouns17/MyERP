@@ -416,5 +416,30 @@ VALUES
         {
             // Импорт будет реализован отдельно
         }
+
+        private void DeleteSuppliesButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SearchTextBox_TextChanged(
+            object sender, TextChangedEventArgs e)
+        {
+            if (suppliesTable == null)
+                return;
+
+            string search =
+                SearchTextBox.Text.Trim()
+                .Replace("'", "''")
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("*", "[*]");
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                suppliesTable.DefaultView.RowFilter = "";
+                return;
+            }
+        }
     }
 }
