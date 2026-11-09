@@ -168,20 +168,44 @@
                     CanUserReorderColumns="False"
                     CanUserResizeRows="False"
                     ColumnHeaderHeight="40"
-                    FontFamily="Segoe UI"
-                    FontSize="13"
-                    GridLinesVisibility="Horizontal"
+                    Foreground="#151719"
+                    GridLinesVisibility="All"
+                    HeadersVisibility="Column"
                     HorizontalGridLinesBrush="#E5E5E5"
                     IsReadOnly="True"
+                    RowBackground="#FFFAF0"
                     RowHeight="30"
-                    SelectionMode="Single">
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    VerticalGridLinesBrush="#E5E5E5">
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="#FFFAF0" />
+                            <Setter Property="Foreground" Value="#151719" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="FontSize" Value="13" />
+                        </Style>
+                    </DataGrid.RowStyle>
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#DCDCDC" />
                             <Setter Property="Foreground" Value="#151719" />
                             <Setter Property="FontWeight" Value="SemiBold" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="14" />
+                            <Setter Property="Height" Value="40" />
+                            <Setter Property="Padding" Value="10,0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="BorderThickness" Value="0,0,1,1" />
+                            <Setter Property="BorderBrush" Value="#C5C5C5" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#CECECE" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
 

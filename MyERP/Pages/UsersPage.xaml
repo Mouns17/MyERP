@@ -103,16 +103,15 @@
             CanUserResizeRows="False"
             CanUserSortColumns="True"
             ColumnHeaderHeight="40"
-            Focusable="True"
             Foreground="#151719"
             GridLinesVisibility="All"
             HeadersVisibility="Column"
             HorizontalGridLinesBrush="#E5E5E5"
-            IsReadOnly="False"
+            IsReadOnly="True"
             RowBackground="#FFFAF0"
-            RowHeight="25"
+            RowHeight="32"
             SelectionMode="Single"
-            SelectionUnit="CellOrRowHeader"
+            SelectionUnit="FullRow"
             VerticalGridLinesBrush="#E5E5E5">
 
             <DataGrid.RowStyle>

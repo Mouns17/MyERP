@@ -198,6 +198,7 @@
                 <TextBlock
                     x:Name="TotalAmountTextBlock"
                     Grid.Column="0"
+                    Margin="80,2,0,0"
                     FontSize="20"
                     FontWeight="SemiBold"
                     Foreground="#151719"
