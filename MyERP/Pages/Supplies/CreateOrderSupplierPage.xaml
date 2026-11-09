@@ -1,9 +1,9 @@
 ﻿<Page
-    x:Class="MyERP.Pages.Supplies.OrderSupplier.CreateOrderSupplierPage"
+    x:Class="MyERP.Pages.Supplies.CreateOrderSupplierPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MyERP.Pages.Supplies.OrderSupplier"
+    xmlns:local="clr-namespace:MyERP.Pages.Supplies"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="#FFFAF0"
     FontFamily="Segoe UI">
@@ -33,9 +33,9 @@
 
             <Button
                 Grid.Column="1"
-                Padding="12,8"
                 Click="BackButton_Click"
-                Content="НАЗАД" />
+                Content="НАЗАД"
+                Style="{StaticResource ButtonStyle}" />
         </Grid>
 
         <!--  Основная информация  -->
@@ -59,7 +59,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock FontWeight="SemiBold" Text="Поставщик" />
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Поставщик" />
                     <ComboBox
                         x:Name="SupplierComboBox"
                         Margin="0,6,0,0"
@@ -69,7 +72,10 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                    <TextBlock FontWeight="SemiBold" Text="Склад" />
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Склад" />
                     <ComboBox
                         x:Name="WarehouseComboBox"
                         Margin="0,6,0,0"
@@ -79,7 +85,10 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="0,0,10,0">
-                    <TextBlock FontWeight="SemiBold" Text="Дата заказа" />
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Дата заказа" />
                     <DatePicker
                         x:Name="OrderDatePicker"
                         Margin="0,6,0,0"
@@ -87,27 +96,14 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="3">
-                    <TextBlock FontWeight="SemiBold" Text="Ожидаемая поставка" />
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Ожидаемая поставка" />
                     <DatePicker
                         x:Name="ExpectedDatePicker"
                         Margin="0,6,0,0"
                         SelectedDateFormat="Short" />
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="4"
-                    Margin="0,12,0,0">
-
-                    <TextBlock FontWeight="SemiBold" Text="Комментарий" />
-                    <TextBox
-                        x:Name="CommentTextBox"
-                        MinHeight="32"
-                        Margin="0,6,0,0"
-                        Padding="7"
-                        AcceptsReturn="True"
-                        TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -129,20 +125,21 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Black"
                     FontSize="15"
+                    Foreground="#151719"
                     Text="ТОВАРЫ ЗАКАЗА" />
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
 
                     <Button
-                        Padding="10,7"
                         Click="AddProductButton_Click"
-                        Content="ДОБАВИТЬ ТОВАР" />
+                        Content="ДОБАВИТЬ ТОВАР"
+                        Style="{StaticResource ButtonStyle}" />
 
                     <Button
                         Margin="8,0,0,0"
-                        Padding="10,7"
                         Click="RemoveProductButton_Click"
-                        Content="УДАЛИТЬ" />
+                        Content="УДАЛИТЬ"
+                        Style="{StaticResource ButtonStyle}" />
                 </StackPanel>
             </Grid>
 
@@ -231,6 +228,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Black"
                     FontSize="16"
+                    Foreground="#151719"
                     Text="ИТОГО:" />
 
                 <TextBlock
@@ -239,22 +237,22 @@
                     VerticalAlignment="Center"
                     FontSize="16"
                     FontWeight="SemiBold"
+                    Foreground="#151719"
                     Text="0,00 ₽" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
 
                 <Button
-                    Padding="12,9"
                     Click="SaveDraftButton_Click"
-                    Content="СОХРАНИТЬ ЧЕРНОВИК" />
+                    Content="СОХРАНИТЬ ЧЕРНОВИК"
+                    Style="{StaticResource ButtonStyle}" />
 
                 <Button
                     Margin="8,0,0,0"
-                    Padding="12,9"
                     Click="SaveOrderButton_Click"
                     Content="СОЗДАТЬ ЗАКАЗ"
-                    FontWeight="SemiBold" />
+                    Style="{StaticResource ButtonStyle}" />
             </StackPanel>
         </Grid>
     </Grid>

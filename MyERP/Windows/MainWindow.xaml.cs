@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using MyERP.Classes;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MyERP.Windows
@@ -11,6 +12,12 @@ namespace MyERP.Windows
         {
             InitializeComponent();
             MainFrame.Navigate(new Pages.ProductsPage());
+            UserRoleTextBlock.Text = UserSession.UserRole;
+
+            if (UserSession.UserRole != "Администратор")
+            {
+                Пользователи.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void WindowHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -56,17 +63,19 @@ namespace MyERP.Windows
 
         private void Продажи_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void Логи_Click(object sender, RoutedEventArgs e)
-        {
-
+            MainFrame.Navigate(new Pages.SalesPage());
         }
 
         private void Пользователи_Click(object sender, RoutedEventArgs e)
         {
+            MainFrame.Navigate(new Pages.UsersPage());
+        }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            Close();
         }
     }
 }

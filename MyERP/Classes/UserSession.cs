@@ -4,5 +4,6 @@
     {
         public static int UserId { get; set; }
         public static string Login { get; set; }
+        public static string UserRole {  get; set; }
     }
 }

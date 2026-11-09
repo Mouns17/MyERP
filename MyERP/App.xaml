@@ -8,8 +8,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/MenuButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/PageButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml" />
                 <ResourceDictionary Source="/Styles/WindowControlButtonStyle.xaml" />
                 <ResourceDictionary Source="/Styles/WindowCloseButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/WindowCloseButtonStyle2.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

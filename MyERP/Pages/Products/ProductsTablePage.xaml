@@ -26,8 +26,8 @@
                     x:Name="SearchTextBox"
                     Padding="8"
                     VerticalContentAlignment="Center"
-                    Background="White"
-                    BorderBrush="#D0D0D0"
+                    Background="#FFFAF0"
+                    BorderBrush="#151719"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
 
@@ -58,10 +58,9 @@
 
                 <Button
                     Margin="10,0,0,0"
-                    Padding="8"
                     Click="AddProductButton_Click"
                     Content="ДОБАВИТЬ"
-                    FontWeight="SemiBold" />
+                    Style="{StaticResource ButtonStyle}" />
 
                 <ComboBox
                     x:Name="CategoryComboBox"
@@ -96,9 +95,9 @@
 
                 <Button
                     Margin="10,0,0,0"
-                    Padding="8"
-                    Content="ИМПОРТ"
-                    FontWeight="SemiBold" />
+                    Click="DeleteProductButton_Click"
+                    Content="УДАЛИТЬ"
+                    Style="{StaticResource ButtonStyle}" />
             </StackPanel>
         </Grid>
 

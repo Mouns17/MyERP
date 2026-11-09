@@ -27,8 +27,8 @@
                     x:Name="SearchTextBox"
                     Padding="8"
                     VerticalContentAlignment="Center"
-                    Background="White"
-                    BorderBrush="#D0D0D0"
+                    Background="#FFFAF0"
+                    BorderBrush="#151719"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
 
@@ -59,24 +59,21 @@
 
                 <Button
                     Margin="10,0,0,0"
-                    Padding="10,8"
                     Click="OpenOrderButton_Click"
                     Content="ОТКРЫТЬ"
-                    FontWeight="SemiBold" />
+                    Style="{StaticResource ButtonStyle}" />
 
                 <Button
                     Margin="10,0,0,0"
-                    Padding="10,8"
                     Click="CreateOrderButton_Click"
                     Content="СОЗДАТЬ ЗАКАЗ"
-                    FontWeight="SemiBold" />
+                    Style="{StaticResource ButtonStyle}" />
 
                 <Button
                     Margin="10,0,0,0"
-                    Padding="10,8"
                     Click="CancelOrderButton_Click"
                     Content="ОТМЕНИТЬ"
-                    FontWeight="SemiBold" />
+                    Style="{StaticResource ButtonStyle}" />
             </StackPanel>
         </Grid>
 

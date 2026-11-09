@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="MyERP.Pages.SalesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MyERP.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="#FFFAF0"
+    FontFamily="Segoe UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,20"
+            FontFamily="Segoe UI Black"
+            FontSize="20"
+            Foreground="#151719"
+            Text="ПРОДАЖИ" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button
+                BorderThickness="1,1,0,0"
+                Click="CustomersButton_Click"
+                Content="ПОКУПАТЕЛИ"
+                Style="{StaticResource PageButtonStyle}" />
+            <Button
+                Click="SalesListButton_Click"
+                Content="СПИСОК ПРОДАЖ"
+                Style="{StaticResource PageButtonStyle}" />
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Border
+                Background="Transparent"
+                BorderBrush="#151719"
+                BorderThickness="1">
+                <Frame
+                    x:Name="SalesFrame"
+                    Background="Transparent"
+                    NavigationUIVisibility="Hidden" />
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

@@ -29,34 +29,22 @@ namespace MyERP.Pages.Products
                 {
                     connection.Open();
 
-                    string query = @"
-                    SELECT
-                        c.id_категории AS Id,
-                        c.Наименование AS Наименование
-                    FROM КАТЕГОРИИ AS c
-                    ORDER BY c.Наименование";
+                    string query = @"SELECT c.id_категории AS Id, c.Наименование AS Наименование FROM КАТЕГОРИИ AS c ORDER BY c.Наименование";
 
-                    using (MySqlCommand command =
-                           new MySqlCommand(query, connection))
-                    using (MySqlDataAdapter adapter =
-                           new MySqlDataAdapter(command))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                     {
                         categoriesTable = new DataTable();
                         adapter.Fill(categoriesTable);
 
-                        CategoriesDataGrid.ItemsSource =
-                            categoriesTable.DefaultView;
+                        CategoriesDataGrid.ItemsSource = categoriesTable.DefaultView;
                     }
                 }
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Не удалось загрузить категории:\n" + ex.Message,
-                    "Ошибка базы данных",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show("Не удалось загрузить категории:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -65,7 +53,6 @@ namespace MyERP.Pages.Products
             if (newCategoryRow == null)
                 return;
 
-            // Завершаем редактирование DataGrid
             CategoriesDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
             CategoriesDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
 
@@ -83,40 +70,25 @@ namespace MyERP.Pages.Products
                 {
                     connection.Open();
 
-                    string query = @"
-INSERT INTO КАТЕГОРИИ
-(Наименование)
-VALUES
-(@name)";
+                    string query = @"INSERT INTO КАТЕГОРИИ (Наименование) VALUES (@name)";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@name", name);
-
                         command.ExecuteNonQuery();
                     }
                 }
 
-                MessageBox.Show(
-                    "Категория успешно добавлена!",
-                    "Сохранение",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                MessageBox.Show("Категория успешно добавлена!", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 newCategoryRow = null;
-
                 SaveCategoryButton.Visibility = Visibility.Collapsed;
-
                 LoadCategories();
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Не удалось загрузить категории:\n" + ex.Message,
-                    "Ошибка базы данных",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show("Не удалось загрузить категории:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -129,37 +101,89 @@ VALUES
             }
 
             newCategoryRow = categoriesTable.NewRow();
-
             newCategoryRow["Id"] = DBNull.Value;
             newCategoryRow["Наименование"] = "";
-
             categoriesTable.Columns["Id"].AllowDBNull = true;
-
             categoriesTable.Rows.Add(newCategoryRow);
-
             CategoriesDataGrid.SelectedItem = newCategoryRow;
             CategoriesDataGrid.ScrollIntoView(newCategoryRow);
-
             SaveCategoryButton.Visibility = Visibility.Visible;
         }
 
-        private void SearchTextBox_TextChanged(
-            object sender, TextChangedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (categoriesTable == null)
                 return;
 
-            string search =
-                SearchTextBox.Text.Trim()
-                .Replace("'", "''")
-                .Replace("[", "[[]")
-                .Replace("%", "[%]")
-                .Replace("*", "[*]");
+            string search = SearchTextBox.Text.Trim().Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
 
             if (string.IsNullOrWhiteSpace(search))
             {
                 categoriesTable.DefaultView.RowFilter = "";
                 return;
+            }
+        }
+
+        private void DeleteCategoriesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            DataRowView selectedRow = null;
+
+            if (button != null) selectedRow = button.Tag as DataRowView;
+
+            if (selectedRow == null) selectedRow = CategoriesDataGrid.SelectedItem as DataRowView;
+
+            if (selectedRow == null)
+            {
+                MessageBox.Show("Выберите категорию для удаления.");
+                return;
+            }
+
+            if (selectedRow["Id"] == DBNull.Value)
+            {
+                selectedRow.Row.Delete();
+                newCategoryRow = null;
+                SaveCategoryButton.Visibility = Visibility.Collapsed;
+                return;
+            }
+            int categoryId = Convert.ToInt32(selectedRow["Id"]);
+            string categoryName = Convert.ToString(selectedRow["Наименование"]);
+
+            if (MessageBox.Show("Вы действительно хотите удалить категорию \"" + categoryName + "\"?", "Удаление категории", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                {
+                    connection.Open();
+                    string query = @"DELETE FROM категории WHERE id_категории = @id;";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", categoryId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Категория успешно удалена.", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadCategories();
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1451)
+                {
+                    MessageBox.Show("Невозможно удалить категорию, поскольку к ней привязаны товары.", "Удаление невозможно",  MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show( "Ошибка удаления категории:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка удаления категории:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

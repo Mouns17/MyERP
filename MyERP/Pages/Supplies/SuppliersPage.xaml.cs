@@ -5,16 +5,12 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace MyERP.Pages.Supplies
 {
-    /// <summary>
-    /// Логика взаимодействия для SuppliersPage.xaml
-    /// </summary>
     public partial class SuppliersPage : Page
     {
         private DataTable suppliersTable;
-        private DataRow newSupplierRow;
+
         public SuppliersPage()
         {
             InitializeComponent();
@@ -29,81 +25,45 @@ namespace MyERP.Pages.Supplies
                 {
                     connection.Open();
 
-                    string query = @"
-                SELECT
-                    pos.id_поставщика AS Id,
-                    pos.Наименование AS Наименование,
-                    pos.ИНН AS ИНН,
-                    pos.Телефон AS Телефон,
-                    pos.Электронная_почта AS ЭлПочта,
-                    pos.Адрес AS Адрес
-                FROM поставщики AS pos";
-                    using (MySqlCommand command =
-                           new MySqlCommand(query, connection))
-                    using (MySqlDataAdapter adapter =
-                           new MySqlDataAdapter(command))
+                    string query = @"SELECT id_поставщика AS Id, наименование AS Наименование, инн AS ИНН, телефон AS Телефон, электронная_почта AS ЭлПочта, адрес AS Адрес FROM поставщики ORDER BY id_поставщика DESC;";
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                     {
                         suppliersTable = new DataTable();
                         adapter.Fill(suppliersTable);
-
-                        SuppliersDataGrid.ItemsSource =
-                            suppliersTable.DefaultView;
                     }
                 }
+
+                SuppliersDataGrid.ItemsSource = suppliersTable.DefaultView;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Не удалось загрузить поставщиков:\n" + ex.Message,
-                    "Ошибка базы данных",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show("Не удалось загрузить поставщиков:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void AddSupplierButton_Click(object sender, RoutedEventArgs e)
+        {
+            DataRow row = suppliersTable.NewRow();
+
+            row["Id"] = 0;
+            row["Наименование"] = "";
+            row["ИНН"] = DBNull.Value;
+            row["Телефон"] = DBNull.Value;
+            row["ЭлПочта"] = DBNull.Value;
+            row["Адрес"] = DBNull.Value;
+
+            suppliersTable.Rows.Add(row);
+            SuppliersDataGrid.SelectedItem = suppliersTable.DefaultView[suppliersTable.DefaultView.Count - 1];
+            SuppliersDataGrid.ScrollIntoView(SuppliersDataGrid.SelectedItem);
+            SuppliersDataGrid.BeginEdit();
+            SaveProductButton.Visibility = Visibility.Visible;
         }
 
         private void SaveSupplierButton_Click(object sender, RoutedEventArgs e)
         {
-            if (newSupplierRow == null)
-                return;
-
             SuppliersDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
             SuppliersDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-
-            string name = newSupplierRow["Наименование"].ToString().Trim();
-            string inn = newSupplierRow["ИНН"].ToString().Trim();
-            string phone = newSupplierRow["Телефон"].ToString().Trim();
-            string email = newSupplierRow["ЭлПочта"].ToString().Trim();
-            string address = newSupplierRow["Адрес"].ToString().Trim();
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                MessageBox.Show("Введите наименование поставщика.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(inn))
-            {
-                MessageBox.Show("Введите инн поставщика.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(phone))
-            {
-                MessageBox.Show("Введите телефон поставщика.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                MessageBox.Show("Введите эл. почту поставщика.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(address))
-            {
-                MessageBox.Show("Введите адрес поставщика.");
-                return;
-            }
 
             try
             {
@@ -111,96 +71,161 @@ namespace MyERP.Pages.Supplies
                 {
                     connection.Open();
 
-                    string query = @"
-INSERT INTO ПОСТАВЩИКИ
-(Наименование, ИНН, Телефон, Электронная_почта, адрес)
-VALUES
-(@name, @inn, @phone, @email, @address)";
-
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
-                        command.Parameters.AddWithValue("@name", name);
-                        command.Parameters.AddWithValue("@inn", inn);
-                        command.Parameters.AddWithValue("@phone", phone);
-                        command.Parameters.AddWithValue("@email", email);
-                        command.Parameters.AddWithValue("@address", address);
+                        try
+                        {
+                            foreach (DataRow row in suppliersTable.Rows)
+                            {
+                                if (row.RowState == DataRowState.Deleted)
+                                    continue;
 
-                        command.ExecuteNonQuery();
+                                string name = Convert.ToString(row["Наименование"]).Trim();
+
+                                if (string.IsNullOrWhiteSpace(name))
+                                {
+                                    throw new Exception("Наименование поставщика не может быть пустым.");
+                                }
+
+                                int id = Convert.ToInt32(row["Id"]);
+
+                                if (id == 0)
+                                {
+                                    string insertQuery = @"INSERT INTO поставщики (наименование, инн, телефон, электронная_почта, адрес) VALUES (@name, @inn, @phone, @email, @address);";
+
+                                    using (MySqlCommand command = new MySqlCommand(insertQuery, connection, transaction))
+                                    {
+                                        AddSupplierParameters(command, row);
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
+                                else
+                                {
+                                    string updateQuery = @"UPDATE поставщики SET наименование = @name, инн = @inn, телефон = @phone, электронная_почта = @email, адрес = @address WHERE id_поставщика = @id;";
+
+                                    using (MySqlCommand command = new MySqlCommand(updateQuery, connection, transaction))
+                                    {
+                                        AddSupplierParameters(command, row);
+                                        command.Parameters.AddWithValue("@id", id);
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
                     }
                 }
 
-                MessageBox.Show(
-                    "Поставщик успешно добавлен!",
-                    "Сохранение",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
-                newSupplierRow = null;
-
-                SaveProductButton.Visibility = Visibility.Collapsed;
-
+                MessageBox.Show("Данные поставщиков успешно сохранены.", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadSuppliers();
+                SaveProductButton.Visibility = Visibility.Collapsed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Не удалось загрузить поставщиков:\n" + ex.Message,
-                    "Ошибка базы данных",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show("Ошибка сохранения:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AddSupplierButton_Click(object sender, RoutedEventArgs e)
+        private void AddSupplierParameters(MySqlCommand command, DataRow row)
         {
-            if (newSupplierRow != null)
+            command.Parameters.AddWithValue("@name", Convert.ToString(row["Наименование"]).Trim());
+            command.Parameters.AddWithValue("@inn", GetDatabaseValue(row["ИНН"]));
+            command.Parameters.AddWithValue("@phone", GetDatabaseValue(row["Телефон"]));
+            command.Parameters.AddWithValue("@email", GetDatabaseValue(row["ЭлПочта"]));
+            command.Parameters.AddWithValue("@address", GetDatabaseValue(row["Адрес"]));
+        }
+
+        private object GetDatabaseValue(object value)
+        {
+            if (value == null || value == DBNull.Value || string.IsNullOrWhiteSpace(Convert.ToString(value)))
             {
-                MessageBox.Show("Сначала сохраните текущего поставщика.");
-                return;
+                return DBNull.Value;
             }
 
-            newSupplierRow = suppliersTable.NewRow();
-
-            newSupplierRow["Id"] = DBNull.Value;
-            newSupplierRow["Наименование"] = "";
-            newSupplierRow["ИНН"] = "";
-            newSupplierRow["Телефон"] = "";
-            newSupplierRow["ЭлПочта"] = "";
-            newSupplierRow["Адрес"] = "";
-
-            suppliersTable.Columns["Id"].AllowDBNull = true;
-
-            suppliersTable.Rows.Add(newSupplierRow);
-
-            SuppliersDataGrid.SelectedItem = newSupplierRow;
-            SuppliersDataGrid.ScrollIntoView(newSupplierRow);
-
-            SaveProductButton.Visibility = Visibility.Visible;
+            return value;
         }
 
         private void DeleteSupplierButton_Click(object sender, RoutedEventArgs e)
         {
+            DataRowView selectedRow = SuppliersDataGrid.SelectedItem as DataRowView;
 
+            if (selectedRow == null)
+            {
+                MessageBox.Show("Выберите поставщика для удаления.");
+                return;
+            }
+
+            int id = Convert.ToInt32(selectedRow["Id"]);
+
+            if (id == 0)
+            {
+                selectedRow.Row.Delete();
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show("Вы действительно хотите удалить выбранного поставщика?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                {
+                    connection.Open();
+
+                    string query = @"DELETE FROM поставщики WHERE id_поставщика = @id;";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                LoadSuppliers();
+
+                MessageBox.Show("Поставщик удалён.", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1451)
+                {
+                    MessageBox.Show("Нельзя удалить поставщика, так как с ним связаны документы поставок.", "Удаление невозможно", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка базы данных:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка удаления:\n" + ex.Message);
+            }
         }
 
-        private void SearchTextBox_TextChanged(
-            object sender, TextChangedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (suppliersTable == null)
                 return;
 
-            string search =
-                SearchTextBox.Text.Trim()
-                .Replace("'", "''")
-                .Replace("[", "[[]")
-                .Replace("%", "[%]")
-                .Replace("*", "[*]");
+            string search = SearchTextBox.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(search))
+            if (string.IsNullOrEmpty(search))
             {
                 suppliersTable.DefaultView.RowFilter = "";
                 return;
             }
+
+            search = search.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+
+            suppliersTable.DefaultView.RowFilter = "Convert([Наименование], 'System.String') LIKE '%" + search + "%' OR " + "Convert([ИНН], 'System.String') LIKE '%" + search + "%' OR " + "Convert([Телефон], 'System.String') LIKE '%" + search + "%' OR " + "Convert([ЭлПочта], 'System.String') LIKE '%" + search + "%' OR " + "Convert([Адрес], 'System.String') LIKE '%" + search + "%'";
         }
     }
 }

@@ -3,106 +3,230 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MyERP.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="500"
-    Height="500"
+    Width="520"
+    Height="560"
+    MinWidth="460"
+    MinHeight="500"
     AllowsTransparency="True"
     Background="Transparent"
     FontFamily="Segoe UI"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Border Background="#DCDCDC">
+
+    <Border
+        Background="#FFFAF0"
+        BorderBrush="#D5D2CA"
+        BorderThickness="2"
+        CornerRadius="12">
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
+                <RowDefinition Height="42" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid
+            <!--  Верхняя панель  -->
+            <Border
                 Grid.Row="0"
                 Background="#151719"
+                CornerRadius="11,11,0,0"
                 MouseLeftButtonDown="WindowHeader_MouseLeftButtonDown">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel
-                    Margin="20,0,0,0"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
                     <TextBlock
+                        Margin="18,0,0,0"
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="MyERP | Авторизация" />
-                </StackPanel>
+                        Text="MyERP  |  Авторизация" />
 
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                        <Button
+                            Width="42"
+                            Height="42"
+                            Click="MinimizeButton_Click"
+                            Content="➖"
+                            Style="{StaticResource WindowControlButtonStyle}" />
+
+                        <Button
+                            x:Name="MaximizeButton"
+                            Width="42"
+                            Height="42"
+                            Click="MaximizeButton_Click"
+                            Content="🔲"
+                            Style="{StaticResource WindowControlButtonStyle}" />
+
+                        <Button
+                            Width="42"
+                            Height="42"
+                            Click="CloseButton_Click"
+                            Content="✖︎"
+                            Style="{StaticResource WindowCloseButtonStyle2}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--  Основная область  -->
+            <Grid Grid.Row="1" Margin="30,0,30,35">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--  Логотип и название  -->
                 <StackPanel
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-                    <!--  Свернуть  -->
-                    <Button
-                        Click="MinimizeButton_Click"
-                        Content="➖"
-                        Style="{StaticResource WindowControlButtonStyle}" />
+                    Grid.Row="0"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center">
 
-                    <!--  Развернуть  -->
-                    <Button
-                        x:Name="MaximizeButton"
-                        Click="MaximizeButton_Click"
-                        Content="🔲"
-                        Style="{StaticResource WindowControlButtonStyle}" />
+                    <TextBlock
+                        Margin="0,12,0,3"
+                        HorizontalAlignment="Center"
+                        FontSize="27"
+                        FontWeight="Black"
+                        Foreground="#151719"
+                        Text="MyERP" />
 
-                    <!--  Закрыть  -->
-                    <Button
-                        Click="CloseButton_Click"
-                        Content="✖︎"
-                        Style="{StaticResource WindowCloseButtonStyle}" />
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <StackPanel
-                    Margin="20"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
                     <TextBlock
                         HorizontalAlignment="Center"
-                        FontFamily="Segoe UI Black"
-                        FontSize="25"
-                        Foreground="#151719"
-                        Text="АВТОРИЗАЦИЯ" />
-                    <TextBox
-                        x:Name="LoginTBox"
-                        Margin="10"
-                        Padding="10"
-                        Background="Transparent"
-                        BorderBrush="#151719" />
-                    <TextBox
-                        x:Name="PasswordTBox"
-                        Margin="10"
-                        Padding="10"
-                        Background="Transparent"
-                        BorderBrush="#151719" />
-                    <Button
-                        Width="200"
-                        Height="40"
-                        Margin="10"
-                        Background="#151719"
-                        BorderBrush="Transparent"
-                        Click="LoginButton_Click"
-                        Content="ВОЙТИ"
-                        FontFamily="Segoe UI Black"
-                        FontSize="20"
-                        Foreground="White" />
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#777777"
+                        Text="Система учёта поставок и продаж торгового предприятия" />
                 </StackPanel>
+
+                <!--  Карточка авторизации  -->
+                <Border
+                    Grid.Row="1"
+                    Padding="25"
+                    VerticalAlignment="Center"
+                    Background="#FFFAF0"
+                    BorderBrush="#E2DED5"
+                    BorderThickness="1"
+                    CornerRadius="10">
+
+                    <StackPanel>
+
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontFamily="Segoe UI Black"
+                            FontSize="19"
+                            Foreground="#151719"
+                            Text="ВХОД В СИСТЕМУ" />
+
+                        <TextBlock
+                            Margin="0,0,0,22"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="#888888"
+                            Text="Введите данные своей учётной записи" />
+
+                        <TextBlock
+                            Margin="0,0,0,7"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#333333"
+                            Text="Логин" />
+
+                        <TextBox
+                            x:Name="LoginTBox"
+                            Height="42"
+                            Padding="12,0"
+                            VerticalContentAlignment="Center"
+                            Background="#FFFAF0"
+                            BorderBrush="#D5D2CA"
+                            BorderThickness="1"
+                            FontSize="14"
+                            Foreground="#151719"
+                            KeyDown="LoginTBox_KeyDown"
+                            Text="admin"
+                            ToolTip="Введите логин" />
+
+                        <TextBlock
+                            Margin="0,18,0,7"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#333333"
+                            Text="Пароль" />
+
+                        <PasswordBox
+                            x:Name="PasswordTBox"
+                            Height="42"
+                            Padding="12,0"
+                            VerticalContentAlignment="Center"
+                            Background="#FFFAF0"
+                            BorderBrush="#D5D2CA"
+                            BorderThickness="1"
+                            FontSize="14"
+                            Foreground="#151719"
+                            KeyDown="PasswordTBox_KeyDown"
+                            Password="password_hash_123"
+                            ToolTip="Введите пароль" />
+
+                        <Button
+                            x:Name="LoginButton"
+                            Height="45"
+                            Margin="0,25,0,0"
+                            Background="#151719"
+                            BorderThickness="0"
+                            Click="LoginButton_Click"
+                            Content="ВОЙТИ В СИСТЕМУ"
+                            Cursor="Hand"
+                            FontFamily="Segoe UI Black"
+                            FontSize="13"
+                            Foreground="White">
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        x:Name="ButtonBorder"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="6">
+
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#303943" />
+                                        </Trigger>
+
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#434D58" />
+                                        </Trigger>
+
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                    </StackPanel>
+                </Border>
+
+                <!--  Нижняя подпись  -->
+                <TextBlock
+                    Grid.Row="2"
+                    Margin="0,18,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="11"
+                    FontWeight="SemiBold"
+                    Foreground="#999999"
+                    Text="MyERP" />
             </Grid>
         </Grid>
     </Border>

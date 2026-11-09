@@ -1,0 +1,246 @@
+﻿<Page
+    x:Class="MyERP.Pages.Supplies.CreateSupplyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="#FFFAF0"
+    FontFamily="Segoe UI">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Заголовок  -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Black"
+                FontSize="18"
+                Foreground="#151719"
+                Text="СОЗДАНИЕ ПОСТАВКИ" />
+
+            <Button
+                Grid.Column="1"
+                Click="BackButton_Click"
+                Content="НАЗАД"
+                Style="{StaticResource ButtonStyle}" />
+        </Grid>
+
+        <!--  Основная информация  -->
+        <Border
+            Grid.Row="1"
+            Padding="12"
+            BorderBrush="#D0D0D0"
+            BorderThickness="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Поставщик" />
+
+                    <ComboBox
+                        x:Name="SupplierComboBox"
+                        Margin="0,6,0,0"
+                        Padding="6"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Склад" />
+
+                    <ComboBox
+                        x:Name="WarehouseComboBox"
+                        Margin="0,6,0,0"
+                        Padding="6"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="#151719"
+                        Text="Дата поставки" />
+
+                    <DatePicker
+                        x:Name="SupplyDatePicker"
+                        Margin="0,6,0,0"
+                        SelectedDateFormat="Short" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+
+
+        <!--  Товары поставки  -->
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Заголовок и кнопки  -->
+            <Grid Grid.Row="0" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="15"
+                    Foreground="#151719"
+                    Text="ТОВАРЫ ПОСТАВКИ" />
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                    <Button
+                        Click="AddProductButton_Click"
+                        Content="ДОБАВИТЬ ТОВАР"
+                        Style="{StaticResource ButtonStyle}" />
+
+                    <Button
+                        Margin="8,0,0,0"
+                        Click="RemoveProductButton_Click"
+                        Content="УДАЛИТЬ"
+                        Style="{StaticResource ButtonStyle}" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Таблица товаров  -->
+            <DataGrid
+                x:Name="SupplyProductsDataGrid"
+                Grid.Row="1"
+                AlternatingRowBackground="#F5F2EA"
+                AutoGenerateColumns="False"
+                Background="#FFFAF0"
+                BorderBrush="#151719"
+                BorderThickness="1"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeRows="False"
+                ColumnHeaderHeight="40"
+                Foreground="#151719"
+                GridLinesVisibility="All"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="#E5E5E5"
+                IsReadOnly="False"
+                RowBackground="#FFFAF0"
+                RowHeight="32"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                VerticalGridLinesBrush="#E5E5E5">
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#DCDCDC" />
+                        <Setter Property="Foreground" Value="#151719" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Padding" Value="10,0" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="BorderBrush" Value="#C5C5C5" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+
+                    <!--  Номер  -->
+                    <DataGridTextColumn
+                        Width="50"
+                        Binding="{Binding Номер}"
+                        Header="№"
+                        IsReadOnly="True" />
+
+                    <!--  Выбор товара  -->
+                    <DataGridComboBoxColumn
+                        x:Name="SupplyProductColumn"
+                        Width="*"
+                        MinWidth="200"
+                        DisplayMemberPath="Наименование"
+                        Header="Товар"
+                        SelectedValueBinding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Id" />
+
+                    <!--  Количество  -->
+                    <DataGridTextColumn
+                        Width="140"
+                        Binding="{Binding Количество, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Количество" />
+
+                    <!--  Закупочная цена  -->
+                    <DataGridTextColumn
+                        Width="170"
+                        Binding="{Binding Цена, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2}}"
+                        Header="Закупочная цена" />
+
+                    <!--  Сумма  -->
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Сумма, StringFormat={}{0:N2}}"
+                        Header="Сумма"
+                        IsReadOnly="True" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!--  Итог и кнопки  -->
+        <Grid Grid.Row="3" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="16"
+                    Foreground="#151719"
+                    Text="ИТОГО:" />
+
+                <TextBlock
+                    x:Name="TotalAmountTextBlock"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Foreground="#151719"
+                    Text="0,00 ₽" />
+            </StackPanel>
+
+            <Button
+                Grid.Column="1"
+                Click="SaveSupplyButton_Click"
+                Content="СОХРАНИТЬ ЧЕРНОВИК"
+                FontWeight="SemiBold"
+                Style="{StaticResource ButtonStyle}" />
+        </Grid>
+    </Grid>
+</Page>

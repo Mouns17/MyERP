@@ -26,23 +26,14 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click"
-                Content="Товары"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="ТОВАРЫ"
+                Style="{StaticResource PageButtonStyle}" />
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
-                BorderThickness="1,1,1,0"
                 Click="Button_Click_1"
-                Content="Категории товаров"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="КАТЕГОРИИ ТОВАРОВ"
+                Style="{StaticResource PageButtonStyle}" />
         </StackPanel>
 
         <Grid Grid.Row="2">

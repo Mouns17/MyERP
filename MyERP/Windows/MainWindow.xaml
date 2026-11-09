@@ -45,32 +45,38 @@
 
                 <StackPanel
                     Grid.Column="1"
-                    Margin="0,0,50,0"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Orientation="Vertical">
+                    Orientation="Horizontal">
+
                     <TextBlock
+                        x:Name="UserRoleTextBlock"
                         HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="Администратор" />
+                        Text="Пользователь" />
+
+                    <Button
+                        Margin="10,0,0,0"
+                        Click="Button_Click"
+                        Content="⏻"
+                        FontWeight="Bold"
+                        Style="{StaticResource WindowControlButtonStyle}" />
+
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <!--  Свернуть  -->
                     <Button
                         Click="MinimizeButton_Click"
                         Content="➖"
                         Style="{StaticResource WindowControlButtonStyle}" />
-
-                    <!--  Развернуть  -->
                     <Button
                         x:Name="MaximizeButton"
                         Click="MaximizeButton_Click"
                         Content="🔲"
                         Style="{StaticResource WindowControlButtonStyle}" />
-
-                    <!--  Закрыть  -->
                     <Button
                         Click="CloseButton_Click"
                         Content="✖︎"
@@ -86,7 +92,6 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-
                 <StackPanel Grid.Column="0" Margin="10,0,10,0">
                     <TextBlock
                         Margin="19,12,0,0"
@@ -96,7 +101,6 @@
                         Foreground="Gray"
                         Text="РАЗДЕЛЫ" />
                 </StackPanel>
-
                 <StackPanel
                     Grid.Column="1"
                     Margin="0,0,10,0"
@@ -143,17 +147,6 @@
                         BorderBrush="Transparent"
                         Click="Продажи_Click"
                         Content="🛒 ПРОДАЖИ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
-                        x:Name="Логи"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Логи_Click"
-                        Content="🗃️ ЛОГИ"
                         FontWeight="Bold"
                         Foreground="#151719" />
                     <Button

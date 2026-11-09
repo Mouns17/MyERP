@@ -1,0 +1,242 @@
+﻿<Page
+    x:Class="MyERP.Pages.Sales.SaleDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="#FFFAF0">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="TitleTextBlock"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Black"
+                FontSize="20"
+                Foreground="#151719"
+                Text="ПРОДАЖА" />
+
+            <Button
+                Grid.Column="1"
+                Click="BackButton_Click"
+                Content="НАЗАД"
+                Style="{StaticResource ButtonStyle}" />
+        </Grid>
+
+        <Border
+            Grid.Row="1"
+            Margin="0,0,0,15"
+            Padding="15"
+            Background="White"
+            BorderBrush="#DCDCDC"
+            BorderThickness="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Margin="0,0,0,6" Text="Покупатель" />
+                    <ComboBox
+                        x:Name="CustomerComboBox"
+                        Height="32"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5">
+                    <TextBlock Margin="0,0,0,6" Text="Склад" />
+                    <ComboBox
+                        x:Name="WarehouseComboBox"
+                        Height="32"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="5">
+                    <TextBlock Margin="0,0,0,6" Text="Дата продажи" />
+                    <DatePicker x:Name="SaleDatePicker" Height="32" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="5">
+                    <TextBlock Margin="0,0,0,6" Text="Статус" />
+                    <TextBlock
+                        x:Name="StatusTextBlock"
+                        Height="32"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Черновик" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="2"
+            Padding="12"
+            Background="White"
+            BorderBrush="#DCDCDC"
+            BorderThickness="1">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Margin="5,0,0,12"
+                    FontFamily="Segoe UI Black"
+                    FontSize="15"
+                    Foreground="#151719"
+                    Text="ТОВАРЫ ПРОДАЖИ" />
+
+                <Grid Grid.Row="1" Margin="5,0,5,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="3">
+                        <TextBlock Margin="0,0,0,5" Text="Товар" />
+                        <ComboBox
+                            x:Name="ProductComboBox"
+                            Height="32"
+                            DisplayMemberPath="Наименование"
+                            SelectedValuePath="Id"
+                            SelectionChanged="ProductComboBox_SelectionChanged" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="3">
+                        <TextBlock Margin="0,0,0,5" Text="Количество" />
+                        <TextBox
+                            x:Name="QuantityTextBox"
+                            Height="32"
+                            VerticalContentAlignment="Center"
+                            Text="1" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="3">
+                        <TextBlock Margin="0,0,0,5" Text="Цена" />
+                        <TextBox
+                            x:Name="PriceTextBox"
+                            Height="32"
+                            VerticalContentAlignment="Center" />
+                    </StackPanel>
+
+                    <Button
+                        Grid.Column="3"
+                        Margin="8,22,3,0"
+                        Click="AddProductButton_Click"
+                        Content="ДОБАВИТЬ"
+                        Style="{StaticResource ButtonStyle}" />
+
+                    <Button
+                        Grid.Column="4"
+                        Margin="3,22,0,0"
+                        Click="RemoveProductButton_Click"
+                        Content="УДАЛИТЬ"
+                        Style="{StaticResource ButtonStyle}" />
+                </Grid>
+
+                <DataGrid
+                    x:Name="SaleItemsDataGrid"
+                    Grid.Row="2"
+                    AlternatingRowBackground="#F5F2EA"
+                    AutoGenerateColumns="False"
+                    Background="#FFFAF0"
+                    BorderBrush="#151719"
+                    BorderThickness="1"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeRows="False"
+                    ColumnHeaderHeight="40"
+                    FontFamily="Segoe UI"
+                    FontSize="13"
+                    GridLinesVisibility="Horizontal"
+                    HorizontalGridLinesBrush="#E5E5E5"
+                    IsReadOnly="True"
+                    RowHeight="30"
+                    SelectionMode="Single">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#DCDCDC" />
+                            <Setter Property="Foreground" Value="#151719" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="55"
+                            Binding="{Binding Number}"
+                            Header="№" />
+
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Наименование" />
+
+                        <DataGridTextColumn
+                            Width="130"
+                            Binding="{Binding Quantity}"
+                            Header="Количество" />
+
+                        <DataGridTextColumn
+                            Width="130"
+                            Binding="{Binding Price, StringFormat=N2}"
+                            Header="Цена" />
+
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Total, StringFormat=N2}"
+                            Header="Сумма" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="3" Margin="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="TotalTextBlock"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Black"
+                FontSize="20"
+                Foreground="#151719"
+                Text="ИТОГО: 0,00 ₽" />
+
+            <Button
+                x:Name="SaveButton"
+                Grid.Column="1"
+                Click="SaveButton_Click"
+                Content="СОХРАНИТЬ ИЗМЕНЕНИЯ"
+                Style="{StaticResource ButtonStyle}" />
+        </Grid>
+    </Grid>
+</Page>

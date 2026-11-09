@@ -26,41 +26,24 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click"
-                Content="Поставки"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="ПОСТАВКИ"
+                Style="{StaticResource PageButtonStyle}" />
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click_1"
-                Content="Поставщики"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="ПОСТАВЩИКИ"
+                Style="{StaticResource PageButtonStyle}" />
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
                 BorderThickness="1,1,0,0"
                 Click="Button_Click_2"
-                Content="Заказ поставщику"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="ЗАКАЗ ПОСТАВЩИКУ"
+                Style="{StaticResource PageButtonStyle}" />
             <Button
-                Padding="8"
-                Background="Transparent"
-                BorderBrush="#151719"
-                BorderThickness="1,1,1,0"
                 Click="Button_Click_3"
-                Content="Склады"
-                FontSize="17"
-                FontWeight="SemiBold" />
+                Content="СКЛАДЫ"
+                Style="{StaticResource PageButtonStyle}" />
         </StackPanel>
 
         <Grid Grid.Row="2">

@@ -103,7 +103,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SalesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sales\CreateSalePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sales\CustomersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sales\SaleDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sales\SalesListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SuppliesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Supplies\CreateSupplyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,7 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Supplies\OrderSupplier\CreateOrderSupplierPage.xaml">
+    <Page Include="Pages\Supplies\CreateOrderSupplierPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -123,7 +147,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Supplies\SupplyDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Supplies\WarehousesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\UsersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\PageButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\WindowCloseButtonStyle2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,13 +194,31 @@
     <Compile Include="Pages\Products\ProductsTablePage.xaml.cs">
       <DependentUpon>ProductsTablePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SalesPage.xaml.cs">
+      <DependentUpon>SalesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sales\CreateSalePage.xaml.cs">
+      <DependentUpon>CreateSalePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sales\CustomersPage.xaml.cs">
+      <DependentUpon>CustomersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sales\SaleDetailsPage.xaml.cs">
+      <DependentUpon>SaleDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sales\SalesListPage.xaml.cs">
+      <DependentUpon>SalesListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SuppliesPage.xaml.cs">
       <DependentUpon>SuppliesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Supplies\CreateSupplyPage.xaml.cs">
+      <DependentUpon>CreateSupplyPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Supplies\OrderSupplierPage.xaml.cs">
       <DependentUpon>OrderSupplierPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Supplies\OrderSupplier\CreateOrderSupplierPage.xaml.cs">
+    <Compile Include="Pages\Supplies\CreateOrderSupplierPage.xaml.cs">
       <DependentUpon>CreateOrderSupplierPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Supplies\SuppliersPage.xaml.cs">
@@ -165,8 +227,14 @@
     <Compile Include="Pages\Supplies\SuppliesTablePage.xaml.cs">
       <DependentUpon>SuppliesTablePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Supplies\SupplyDetailsPage.xaml.cs">
+      <DependentUpon>SupplyDetailsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Supplies\WarehousesPage.xaml.cs">
       <DependentUpon>WarehousesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UsersPage.xaml.cs">
+      <DependentUpon>UsersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
