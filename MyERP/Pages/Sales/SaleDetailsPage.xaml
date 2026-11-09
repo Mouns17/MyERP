@@ -256,6 +256,12 @@
                 Text="ИТОГО: 0,00 ₽" />
 
             <Button
+                Grid.Column="1"
+                Click="Button_Click"
+                Content="ПОДТВЕРДИТЬ ПРОДАЖУ"
+                Style="{StaticResource ButtonStyle}" />
+
+            <Button
                 x:Name="SaveButton"
                 Grid.Column="1"
                 Click="SaveButton_Click"

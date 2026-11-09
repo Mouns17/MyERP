@@ -357,5 +357,96 @@ namespace MyERP.Pages.Sales
         {
             Back();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (statusId != 1)
+            {
+                MessageBox.Show("Провести можно только черновик.");
+                return;
+            }
+
+            if (saleItems.Count == 0)
+            {
+                MessageBox.Show("Нельзя провести продажу без товаров.");
+                return;
+            }
+
+            if (MessageBox.Show("Вы действительно хотите провести продажу?", "Проведение продажи", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                {
+                    connection.Open();
+
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            string checkQuery = "SELECT s.название FROM продажи p INNER JOIN статус s ON s.id_статуса = p.id_статуса WHERE p.id_продажи = @id FOR UPDATE;";
+
+                            string currentStatus;
+
+                            using (MySqlCommand command = new MySqlCommand(checkQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@id", saleId);
+
+                                object result = command.ExecuteScalar();
+
+                                if (result == null || result == DBNull.Value)
+                                    throw new Exception("Продажа не найдена.");
+
+                                currentStatus = Convert.ToString(result);
+                            }
+
+                            if (currentStatus != "Черновик")
+                                throw new Exception("Провести можно только черновик.");
+
+                            string statusQuery = "SELECT id_статуса FROM статус WHERE название = @name LIMIT 1;";
+                            int newStatusId;
+
+                            using (MySqlCommand command = new MySqlCommand(statusQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@name", "Проведен");
+
+                                object result = command.ExecuteScalar();
+
+                                if (result == null || result == DBNull.Value)
+                                    throw new Exception("Статус «Проведен» не найден в базе данных.");
+
+                                newStatusId = Convert.ToInt32(result);
+                            }
+
+                            string updateQuery = "UPDATE продажи SET id_статуса = @status WHERE id_продажи = @id;";
+
+                            using (MySqlCommand command = new MySqlCommand(updateQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@status", newStatusId);
+                                command.Parameters.AddWithValue("@id", saleId);
+                                command.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+                            statusId = newStatusId;
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+
+                SetEditMode();
+
+                MessageBox.Show("Продажа успешно проведена.", "Продажи", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка изменения статуса:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
