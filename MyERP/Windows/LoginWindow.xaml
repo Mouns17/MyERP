@@ -151,7 +151,6 @@
                             FontSize="14"
                             Foreground="#151719"
                             KeyDown="LoginTBox_KeyDown"
-                            Text="admin"
                             ToolTip="Введите логин" />
 
                         <TextBlock
@@ -172,7 +171,6 @@
                             FontSize="14"
                             Foreground="#151719"
                             KeyDown="PasswordTBox_KeyDown"
-                            Password="password_hash_123"
                             ToolTip="Введите пароль" />
 
                         <Button
