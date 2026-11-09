@@ -37,7 +37,7 @@
             Grid.Row="1"
             Margin="0,0,0,15"
             Padding="15"
-            Background="White"
+            Background="#FFFAF0"
             BorderBrush="#DCDCDC"
             BorderThickness="1">
 
@@ -88,7 +88,7 @@
         <Border
             Grid.Row="2"
             Padding="12"
-            Background="White"
+            Background="#FFFAF0"
             BorderBrush="#DCDCDC"
             BorderThickness="1">
 
