@@ -1,77 +1,74 @@
-﻿using System;
+﻿using MyERP.Classes;
+using MySqlConnector;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
-using System.Globalization;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using MySqlConnector;
-using MyERP.Classes;
 
 namespace MyERP.Pages.Supplies
 {
     public partial class CreateOrderSupplierPage : Page
     {
-        private DataTable suppliersTable;
-        private DataTable warehousesTable;
-        private DataTable productsTable;
-        private DataTable orderProductsTable;
+        public ObservableCollection<ProductRow> Products { get; set; } = new ObservableCollection<ProductRow>();
+        public List<Item> ProductsList { get; set; } = new List<Item>();
 
-        private int currentOrderId = 0;
-        private bool isLoading = false;
+        private int currentOrderId = 0; 
 
-        public CreateOrderSupplierPage()
+        public CreateOrderSupplierPage() : this(0) { }
+
+        public CreateOrderSupplierPage(int orderId)
         {
             InitializeComponent();
-            InitializeOrderTable();
-            LoadDirectories();
+            DataContext = this;
+            currentOrderId = orderId;
 
             OrderDatePicker.SelectedDate = DateTime.Today;
             ExpectedDatePicker.SelectedDate = DateTime.Today.AddDays(7);
+
+            ProductsDataGrid.ItemsSource = Products;
+            Products.CollectionChanged += (s, e) => RecalculateTotal();
+
+            LoadData(); 
+
+            if (currentOrderId > 0)
+            {
+                LoadOrderForEdit(currentOrderId);
+            }
         }
 
-        public CreateOrderSupplierPage(int orderId) : this()
-        {
-            currentOrderId = orderId;
-            LoadOrder(orderId);
-        }
-
-        private void InitializeOrderTable()
-        {
-            orderProductsTable = new DataTable();
-
-            orderProductsTable.Columns.Add("Номер", typeof(int));
-            orderProductsTable.Columns.Add("id_товара", typeof(int));
-            orderProductsTable.Columns.Add("Количество", typeof(decimal));
-            orderProductsTable.Columns.Add("Цена", typeof(decimal));
-            orderProductsTable.Columns.Add("Сумма", typeof(decimal));
-
-            OrderProductsDataGrid.ItemsSource = orderProductsTable.DefaultView;
-        }
-
-        private void LoadDirectories()
+        private void LoadData()
         {
             try
             {
-                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                using (var conn = DataBaseClass.GetConnection())
                 {
-                    connection.Open();
+                    conn.Open();
 
-                    suppliersTable = new DataTable();
-                    warehousesTable = new DataTable();
-                    productsTable = new DataTable();
+                    var dtSup = new DataTable();
+                    new MySqlDataAdapter("SELECT id_поставщика AS Id, наименование AS Наименование FROM поставщики ORDER BY наименование", conn).Fill(dtSup);
+                    SupplierComboBox.ItemsSource = dtSup.DefaultView;
 
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter("SELECT id_поставщика AS Id, наименование AS Наименование FROM поставщики ORDER BY наименование", connection))
-                        adapter.Fill(suppliersTable);
+                    var dtWh = new DataTable();
+                    new MySqlDataAdapter("SELECT id_склада AS Id, наименование AS Наименование FROM склад ORDER BY наименование", conn).Fill(dtWh);
+                    WarehouseComboBox.ItemsSource = dtWh.DefaultView;
 
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter("SELECT id_склада AS Id, наименование AS Наименование FROM склад ORDER BY наименование", connection))
-                        adapter.Fill(warehousesTable);
-
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter("SELECT id_товара AS Id, наименование AS Наименование, цена FROM товар ORDER BY наименование", connection))
-                        adapter.Fill(productsTable);
+                    var dtProd = new DataTable();
+                    new MySqlDataAdapter("SELECT id_товара AS Id, наименование AS Наименование, цена AS Price FROM товар ORDER BY наименование", conn).Fill(dtProd);
+                    foreach (DataRow row in dtProd.Rows)
+                    {
+                        ProductsList.Add(new Item
+                        {
+                            Id = Convert.ToInt32(row["Id"]),
+                            Наименование = row["Наименование"].ToString(),
+                            Price = Convert.ToDecimal(row["Price"])
+                        });
+                    }
                 }
-
-                SupplierComboBox.ItemsSource = suppliersTable.DefaultView;
-                WarehouseComboBox.ItemsSource = warehousesTable.DefaultView;
-                OrderProductColumn.ItemsSource = productsTable.DefaultView;
             }
             catch (Exception ex)
             {
@@ -79,355 +76,203 @@ namespace MyERP.Pages.Supplies
             }
         }
 
-        private void AddProductButton_Click(object sender, RoutedEventArgs e)
-        {
-            DataRow row = orderProductsTable.NewRow();
-
-            row["Номер"] = orderProductsTable.Rows.Count + 1;
-            row["id_товара"] = DBNull.Value;
-            row["Количество"] = 1m;
-            row["Цена"] = 0m;
-            row["Сумма"] = 0m;
-
-            orderProductsTable.Rows.Add(row);
-
-            OrderProductsDataGrid.SelectedItem = row;
-            OrderProductsDataGrid.ScrollIntoView(row);
-        }
-
-        private void RemoveProductButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (OrderProductsDataGrid.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите товар для удаления.");
-                return;
-            }
-
-            DataRowView row = OrderProductsDataGrid.SelectedItem as DataRowView;
-
-            if (row == null)
-                return;
-
-            row.Row.Delete();
-
-            RenumberProducts();
-            CalculateTotal();
-        }
-
-        private void RenumberProducts()
-        {
-            int number = 1;
-
-            foreach (DataRow row in orderProductsTable.Rows)
-            {
-                if (row.RowState != DataRowState.Deleted)
-                    row["Номер"] = number++;
-            }
-        }
-
-        private void CalculateTotal()
-        {
-            decimal total = 0m;
-
-            foreach (DataRow row in orderProductsTable.Rows)
-            {
-                if (row.RowState == DataRowState.Deleted)
-                    continue;
-
-                decimal quantity = row["Количество"] != DBNull.Value ? Convert.ToDecimal(row["Количество"]) : 0m;
-                decimal price = row["Цена"] != DBNull.Value ? Convert.ToDecimal(row["Цена"]) : 0m;
-                decimal sum = quantity * price;
-
-                row["Сумма"] = sum;
-                total += sum;
-            }
-
-            TotalAmountTextBlock.Text = total.ToString("N2") + " ₽";
-        }
-
-        private void OrderProductsDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new Action(delegate { CalculateTotal(); }), System.Windows.Threading.DispatcherPriority.Background);
-        }
-
-        private void LoadOrder(int orderId)
+        private void LoadOrderForEdit(int orderId)
         {
             try
             {
-                isLoading = true;
-
-                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                using (var conn = DataBaseClass.GetConnection())
                 {
-                    connection.Open();
+                    conn.Open();
 
-                    string headerQuery = @"SELECT id_поставщика, id_склада, дата_заказа, ожидаемая_дата_поставки, id_статуса FROM заказы_поставщикам WHERE id_заказа = @id;";
-
-                    using (MySqlCommand command = new MySqlCommand(headerQuery, connection))
+                    string sqlOrder = @"SELECT id_поставщика, id_склада, дата_заказа, ожидаемая_дата_поставки, id_статуса 
+                                        FROM заказы_поставщикам WHERE id_заказа = @id";
+                    using (var cmd = new MySqlCommand(sqlOrder, conn))
                     {
-                        command.Parameters.AddWithValue("@id", orderId);
-
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        cmd.Parameters.AddWithValue("@id", orderId);
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            if (!reader.Read())
+                            if (reader.Read())
                             {
-                                MessageBox.Show("Заказ не найден.");
-                                NavigationService.GoBack();
-                                return;
+                                SupplierComboBox.SelectedValue = reader["id_поставщика"];
+                                WarehouseComboBox.SelectedValue = reader["id_склада"];
+                                OrderDatePicker.SelectedDate = Convert.ToDateTime(reader["дата_заказа"]);
+                                ExpectedDatePicker.SelectedDate = reader["ожидаемая_дата_поставки"] != DBNull.Value
+                                    ? Convert.ToDateTime(reader["ожидаемая_дата_поставки"]) : (DateTime?)null;
                             }
-
-                            SupplierComboBox.SelectedValue = Convert.ToInt32(reader["id_поставщика"]);
-                            WarehouseComboBox.SelectedValue = Convert.ToInt32(reader["id_склада"]);
-                            OrderDatePicker.SelectedDate = Convert.ToDateTime(reader["дата_заказа"]);
-
-                            if (reader["ожидаемая_дата_поставки"] != DBNull.Value)
-                                ExpectedDatePicker.SelectedDate = Convert.ToDateTime(reader["ожидаемая_дата_поставки"]);
                         }
                     }
 
-                    string productsQuery = @"SELECT tz.id_товара, tz.количество, tz.закупочная_цена FROM товар_заказ tz WHERE tz.id_заказа = @id;";
-
-                    using (MySqlCommand command = new MySqlCommand(productsQuery, connection))
+                    string sqlItems = @"SELECT id_товара, количество, закупочная_цена 
+                                        FROM товар_заказ WHERE id_заказа = @id ORDER BY id_товар_заказ";
+                    using (var cmd = new MySqlCommand(sqlItems, conn))
                     {
-                        command.Parameters.AddWithValue("@id", orderId);
-
-                        using (MySqlDataReader reader = command.ExecuteReader())
+                        cmd.Parameters.AddWithValue("@id", orderId);
+                        using (var reader = cmd.ExecuteReader())
                         {
+                            int rowNum = 1;
                             while (reader.Read())
                             {
-                                DataRow row = orderProductsTable.NewRow();
-
-                                row["Номер"] = orderProductsTable.Rows.Count + 1;
-                                row["id_товара"] = Convert.ToInt32(reader["id_товара"]);
-                                row["Количество"] = Convert.ToDecimal(reader["количество"]);
-                                row["Цена"] = Convert.ToDecimal(reader["закупочная_цена"]);
-                                row["Сумма"] = Convert.ToDecimal(reader["количество"]) * Convert.ToDecimal(reader["закупочная_цена"]);
-
-                                orderProductsTable.Rows.Add(row);
+                                Products.Add(new ProductRow
+                                {
+                                    RowNumber = rowNum++,
+                                    ProductId = Convert.ToInt32(reader["id_товара"]),
+                                    Quantity = Convert.ToDecimal(reader["количество"]),
+                                    Price = Convert.ToDecimal(reader["закупочная_цена"])
+                                });
                             }
                         }
                     }
+                    RecalculateTotal();
                 }
-
-                CalculateTotal();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка загрузки заказа:\n" + ex.Message);
             }
-            finally
+        }
+
+        private void AddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            Products.Add(new ProductRow { RowNumber = Products.Count + 1 });
+        }
+
+        private void DeleteProduct_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProductsDataGrid.SelectedItem is ProductRow row)
             {
-                isLoading = false;
+                Products.Remove(row);
+                for (int i = 0; i < Products.Count; i++) Products[i].RowNumber = i + 1;
+                RecalculateTotal();
             }
         }
 
-        private void SaveDraftButton_Click(object sender, RoutedEventArgs e)
+        private void Product_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SaveOrder("Черновик");
+            if (sender is ComboBox cb && cb.DataContext is ProductRow row)
+            {
+                var item = ProductsList.FirstOrDefault(p => p.Id == row.ProductId);
+                if (item != null && row.Price == 0) row.Price = item.Price;
+            }
         }
 
-        private void SaveOrderButton_Click(object sender, RoutedEventArgs e)
+        private void RecalculateTotal()
         {
-            SaveOrder("Проведен");
+            decimal total = Products.Sum(p => p.Total);
+            TotalTextBlock.Text = total.ToString("N2") + " ₽";
         }
 
-        private void SaveOrder(string statusName)
+        private void SaveDraft_Click(object sender, RoutedEventArgs e) => SaveOrder(1); 
+        private void CreateOrder_Click(object sender, RoutedEventArgs e) => SaveOrder(2); 
+
+        private void SaveOrder(int statusId)
         {
-            if (isLoading)
-                return;
-
-            OrderProductsDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-            OrderProductsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-
-            if (SupplierComboBox.SelectedValue == null)
+            if (SupplierComboBox.SelectedValue == null || WarehouseComboBox.SelectedValue == null)
             {
-                MessageBox.Show("Выберите поставщика.");
+                MessageBox.Show("Выберите поставщика и склад.");
                 return;
             }
-
-            if (WarehouseComboBox.SelectedValue == null)
-            {
-                MessageBox.Show("Выберите склад.");
-                return;
-            }
-
-            if (OrderDatePicker.SelectedDate == null)
-            {
-                MessageBox.Show("Укажите дату заказа.");
-                return;
-            }
-
-            if (ExpectedDatePicker.SelectedDate == null)
-            {
-                MessageBox.Show("Укажите ожидаемую дату поставки.");
-                return;
-            }
-
-            if (ExpectedDatePicker.SelectedDate.Value.Date < OrderDatePicker.SelectedDate.Value.Date)
-            {
-                MessageBox.Show("Ожидаемая дата не может быть раньше даты заказа.");
-                return;
-            }
-
-            if (orderProductsTable.Rows.Count == 0)
+            if (Products.Count == 0)
             {
                 MessageBox.Show("Добавьте хотя бы один товар.");
                 return;
             }
 
-            decimal total = 0m;
-
-            foreach (DataRow row in orderProductsTable.Rows)
-            {
-                if (row.RowState == DataRowState.Deleted)
-                    continue;
-
-                if (row["id_товара"] == DBNull.Value)
-                {
-                    MessageBox.Show("Выберите товар во всех строках.");
-                    return;
-                }
-
-                decimal quantity;
-                decimal price;
-
-                if (!decimal.TryParse(Convert.ToString(row["Количество"]), NumberStyles.Number, CultureInfo.CurrentCulture, out quantity) || quantity <= 0)
-                {
-                    MessageBox.Show("Количество должно быть больше нуля.");
-                    return;
-                }
-
-                if (!decimal.TryParse(Convert.ToString(row["Цена"]), NumberStyles.Number, CultureInfo.CurrentCulture, out price) || price < 0)
-                {
-                    MessageBox.Show("Проверьте закупочную цену.");
-                    return;
-                }
-
-                total += quantity * price;
-            }
-
-            if (statusName == "Проведен")
-            {
-                MessageBoxResult confirmation = MessageBox.Show("Провести заказ? После проведения его состав не следует изменять.", "Проведение заказа", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (confirmation != MessageBoxResult.Yes)
-                    return;
-            }
-
             try
             {
-                using (MySqlConnection connection = DataBaseClass.GetConnection())
+                using (var conn = DataBaseClass.GetConnection())
                 {
-                    connection.Open();
-
-                    using (MySqlTransaction transaction = connection.BeginTransaction())
+                    conn.Open();
+                    using (var trans = conn.BeginTransaction())
                     {
-                        try
+                        long orderId = currentOrderId;
+
+                        if (currentOrderId == 0)
                         {
-                            int statusId = GetStatusId(connection, transaction, statusName);
-
-                            if (statusId == 0)
-                                throw new Exception("Статус '" + statusName + "' не найден в таблице статус.");
-
-                            if (currentOrderId == 0)
+                            string sqlOrder = @"INSERT INTO заказы_поставщикам (id_поставщика, id_склада, id_пользователя, id_статуса, ожидаемая_дата_поставки) 
+                                                VALUES (@sup, @wh, @user, @status, @expDate); SELECT LAST_INSERT_ID();";
+                            using (var cmd = new MySqlCommand(sqlOrder, conn, trans))
                             {
-                                string insertHeader = @"INSERT INTO заказы_поставщикам (id_поставщика, id_склада, id_пользователя, id_статуса, дата_заказа, ожидаемая_дата_поставки) VALUES (@supplier, @warehouse, @user, @status, @orderDate, @expectedDate); SELECT LAST_INSERT_ID();";
-
-                                using (MySqlCommand command = new MySqlCommand(insertHeader, connection, transaction))
-                                {
-                                    command.Parameters.AddWithValue("@supplier", SupplierComboBox.SelectedValue);
-                                    command.Parameters.AddWithValue("@warehouse", WarehouseComboBox.SelectedValue);
-                                    command.Parameters.AddWithValue("@user", UserSession.UserId);
-                                    command.Parameters.AddWithValue("@status", statusId);
-                                    command.Parameters.AddWithValue("@orderDate", OrderDatePicker.SelectedDate.Value);
-                                    command.Parameters.AddWithValue("@expectedDate", ExpectedDatePicker.SelectedDate.Value.Date);
-
-                                    currentOrderId = Convert.ToInt32(command.ExecuteScalar());
-                                }
+                                cmd.Parameters.AddWithValue("@sup", SupplierComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@wh", WarehouseComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@user", UserSession.UserId);
+                                cmd.Parameters.AddWithValue("@status", statusId);
+                                cmd.Parameters.AddWithValue("@expDate", ExpectedDatePicker.SelectedDate);
+                                orderId = Convert.ToInt64(cmd.ExecuteScalar());
                             }
-                            else
-                            {
-                                string updateHeader = @"UPDATE заказы_поставщикам SET id_поставщика = @supplier, id_склада = @warehouse, id_статуса = @status, дата_заказа = @orderDate, ожидаемая_дата_поставки = @expectedDate WHERE id_заказа = @id;";
-
-                                using (MySqlCommand command = new MySqlCommand(updateHeader, connection, transaction))
-                                {
-                                    command.Parameters.AddWithValue("@supplier", SupplierComboBox.SelectedValue);
-                                    command.Parameters.AddWithValue("@warehouse", WarehouseComboBox.SelectedValue);
-                                    command.Parameters.AddWithValue("@status", statusId);
-                                    command.Parameters.AddWithValue("@orderDate", OrderDatePicker.SelectedDate.Value);
-                                    command.Parameters.AddWithValue("@expectedDate", ExpectedDatePicker.SelectedDate.Value.Date);
-                                    command.Parameters.AddWithValue("@id", currentOrderId);
-
-                                    command.ExecuteNonQuery();
-                                }
-
-                                string deleteProducts = @"DELETE FROM товар_заказ WHERE id_заказа = @id;";
-
-                                using (MySqlCommand command = new MySqlCommand(deleteProducts, connection, transaction))
-                                {
-                                    command.Parameters.AddWithValue("@id", currentOrderId);
-                                    command.ExecuteNonQuery();
-                                }
-                            }
-
-                            string insertProduct = @"INSERT INTO товар_заказ (id_заказа, id_товара, количество, закупочная_цена) VALUES (@orderId, @productId, @quantity, @price);";
-
-                            foreach (DataRow row in orderProductsTable.Rows)
-                            {
-                                if (row.RowState == DataRowState.Deleted)
-                                    continue;
-
-                                using (MySqlCommand command = new MySqlCommand(insertProduct, connection, transaction))
-                                {
-                                    command.Parameters.AddWithValue("@orderId", currentOrderId);
-                                    command.Parameters.AddWithValue("@productId", row["id_товара"]);
-                                    command.Parameters.AddWithValue("@quantity", Convert.ToDecimal(row["Количество"]));
-                                    command.Parameters.AddWithValue("@price", Convert.ToDecimal(row["Цена"]));
-
-                                    command.ExecuteNonQuery();
-                                }
-                            }
-
-                            transaction.Commit();
                         }
-                        catch
+                        else
                         {
-                            transaction.Rollback();
-                            throw;
+                            string sqlUpdate = @"UPDATE заказы_поставщикам 
+                                                 SET id_поставщика=@sup, id_склада=@wh, id_статуса=@status, ожидаемая_дата_поставки=@expDate 
+                                                 WHERE id_заказа=@id";
+                            using (var cmd = new MySqlCommand(sqlUpdate, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@sup", SupplierComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@wh", WarehouseComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@status", statusId);
+                                cmd.Parameters.AddWithValue("@expDate", ExpectedDatePicker.SelectedDate);
+                                cmd.Parameters.AddWithValue("@id", currentOrderId);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            using (var cmd = new MySqlCommand("DELETE FROM товар_заказ WHERE id_заказа=@id", conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@id", currentOrderId);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
+
+                        foreach (var row in Products)
+                        {
+                            string sqlItem = @"INSERT INTO товар_заказ (id_заказа, id_товара, количество, закупочная_цена) 
+                                               VALUES (@order, @prod, @qty, @price)";
+                            using (var cmd = new MySqlCommand(sqlItem, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@order", orderId);
+                                cmd.Parameters.AddWithValue("@prod", row.ProductId);
+                                cmd.Parameters.AddWithValue("@qty", row.Quantity);
+                                cmd.Parameters.AddWithValue("@price", row.Price);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        trans.Commit();
                     }
                 }
-
-                MessageBox.Show("Заказ №" + currentOrderId + " успешно сохранён.\nСтатус: " + statusName, "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                if (NavigationService != null && NavigationService.CanGoBack)
-                    NavigationService.GoBack();
+                MessageBox.Show(currentOrderId == 0 ? "Заказ успешно создан!" : "Заказ обновлён!");
+                NavigationService?.GoBack();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка сохранения заказа:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка сохранения: " + ex.Message);
             }
         }
 
-        private int GetStatusId(MySqlConnection connection, MySqlTransaction transaction, string statusName)
-        {
-            string query = @"SELECT id_статуса FROM статус WHERE название = @name LIMIT 1;";
+        private void BackButton_Click(object sender, RoutedEventArgs e) => NavigationService?.GoBack();
+    }
 
-            using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
-            {
-                command.Parameters.AddWithValue("@name", statusName);
-                object result = command.ExecuteScalar();
+    public class ProductRow : INotifyPropertyChanged
+    {
+        public int RowNumber { get; set; }
 
-                if (result == null || result == DBNull.Value)
-                    return 0;
+        private int _prodId;
+        public int ProductId { get => _prodId; set { _prodId = value; Notify(); } }
 
-                return Convert.ToInt32(result);
-            }
-        }
+        private decimal _qty;
+        public decimal Quantity { get => _qty; set { _qty = value; Notify(); Notify(nameof(Total)); } }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService != null && NavigationService.CanGoBack)
-                NavigationService.GoBack();
-        }
+        private decimal _price;
+        public decimal Price { get => _price; set { _price = value; Notify(); Notify(nameof(Total)); } }
+
+        public decimal Total => Quantity * Price;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void Notify([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    public class Item
+    {
+        public int Id { get; set; }
+        public string Наименование { get; set; }
+        public decimal Price { get; set; }
     }
 }

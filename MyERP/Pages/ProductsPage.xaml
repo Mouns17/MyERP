@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MyERP.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="#FFFAF0"
+    Background="#F3F4F6"
     FontFamily="Segoe UI"
     mc:Ignorable="d">
 
@@ -18,34 +18,48 @@
 
         <TextBlock
             Grid.Row="0"
-            Margin="0,0,0,20"
+            Margin="0,0,0,15"
             FontFamily="Segoe UI Black"
-            FontSize="20"
+            FontSize="22"
             Foreground="#151719"
             Text="ТОВАРЫ" />
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button
-                BorderThickness="1,1,0,0"
-                Click="Button_Click"
-                Content="ТОВАРЫ"
-                Style="{StaticResource PageButtonStyle}" />
-            <Button
-                Click="Button_Click_1"
-                Content="КАТЕГОРИИ ТОВАРОВ"
-                Style="{StaticResource PageButtonStyle}" />
-        </StackPanel>
+        <Border
+            Grid.Row="1"
+            Margin="0,0,0,15"
+            Padding="4"
+            HorizontalAlignment="Left"
+            Background="#E5E7EB"
+            CornerRadius="8">
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Click="Button_Click"
+                    Content="ТОВАРЫ"
+                    Style="{StaticResource TabButtonStyle}"
+                    Tag="Active" />
+                <Button
+                    Click="Button_Click_1"
+                    Content="КАТЕГОРИИ ТОВАРОВ"
+                    Style="{StaticResource TabButtonStyle}" />
+            </StackPanel>
+        </Border>
 
-        <Grid Grid.Row="2">
-            <Border
+        <Border
+            Grid.Row="2"
+            Padding="0"
+            Background="White"
+            CornerRadius="8">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.08"
+                    ShadowDepth="2"
+                    Color="Gray" />
+            </Border.Effect>
+            <Frame
+                x:Name="ProductsFrame"
                 Background="Transparent"
-                BorderBrush="#151719"
-                BorderThickness="1">
-                <Frame
-                    x:Name="ProductsFrame"
-                    Background="Transparent"
-                    NavigationUIVisibility="Hidden" />
-            </Border>
-        </Grid>
+                NavigationUIVisibility="Hidden" />
+        </Border>
     </Grid>
 </Page>

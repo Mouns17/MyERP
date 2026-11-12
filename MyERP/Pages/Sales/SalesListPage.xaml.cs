@@ -42,7 +42,7 @@ namespace MyERP.Pages.Sales
                     if (row["ДатаПродажи"] != DBNull.Value)
                     {
                         DateTime date = Convert.ToDateTime(row["ДатаПродажи"]);
-                        row["ДатаДляПоиска"] = date.ToString("dd.MM.yyyy");
+                        row["ДатаДляПоиска"] = date.ToString("dd.MM.yyyy"); 
                     }
                 }
 

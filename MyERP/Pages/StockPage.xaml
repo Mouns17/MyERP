@@ -1,0 +1,251 @@
+﻿<Page
+    x:Class="MyERP.Pages.StockPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MyERP.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="#F3F4F6"
+    FontFamily="Segoe UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,15"
+            FontFamily="Segoe UI Black"
+            FontSize="22"
+            Foreground="#151719"
+            Text="ОСТАТКИ ТОВАРОВ НА СКЛАДАХ" />
+
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <TextBox
+                    x:Name="SearchTextBox"
+                    Padding="10,8"
+                    VerticalContentAlignment="Center"
+                    Background="White"
+                    BorderBrush="#D1D5DB"
+                    Foreground="#151719"
+                    TextChanged="SearchTextBox_TextChanged" />
+
+                <TextBlock
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="#9CA3AF"
+                    IsHitTestVisible="False"
+                    Text="Поиск по товару или артикулу...">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <ComboBox
+                x:Name="WarehouseComboBox"
+                Grid.Column="1"
+                Height="38"
+                Margin="10,0,0,0"
+                Padding="6"
+                VerticalContentAlignment="Center"
+                Background="White"
+                BorderBrush="#D1D5DB"
+                DisplayMemberPath="Наименование"
+                Foreground="#151719"
+                SelectedValuePath="Id"
+                SelectionChanged="WarehouseComboBox_SelectionChanged" />
+
+            <StackPanel
+                Grid.Column="2"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Click="RefreshButton_Click"
+                    Content="ОБНОВИТЬ"
+                    Style="{StaticResource BtnSecondary}" />
+            </StackPanel>
+        </Grid>
+
+        <Border
+            Grid.Row="2"
+            Padding="0"
+            Background="White"
+            CornerRadius="8">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.08"
+                    ShadowDepth="2"
+                    Color="Gray" />
+            </Border.Effect>
+            <DataGrid
+                x:Name="StockDataGrid"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                CanUserSortColumns="True"
+                ColumnHeaderHeight="40"
+                Foreground="#151719"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="#E5E7EB"
+                IsReadOnly="True"
+                RowHeight="40"
+                SelectionMode="Single"
+                SelectionUnit="FullRow">
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="Foreground" Value="#151719" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="13" />
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F9FAFB" />
+                        <Setter Property="Foreground" Value="#4B5563" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Padding" Value="10,0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="#E5E7EB" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="50"
+                        Binding="{Binding Номер}"
+                        Header="№"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding Артикул}"
+                        Header="Артикул" />
+
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="200"
+                        Binding="{Binding Товар}"
+                        Header="Товар" />
+
+                    <DataGridTextColumn
+                        Width="160"
+                        Binding="{Binding Категория}"
+                        Header="Категория" />
+
+                    <DataGridTextColumn
+                        Width="180"
+                        Binding="{Binding Склад}"
+                        Header="Склад" />
+
+                    <DataGridTextColumn
+                        Width="90"
+                        Binding="{Binding Единица}"
+                        Header="Ед. изм.">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding Остаток, StringFormat={}{0:N3}}"
+                        Header="Остаток">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="TextAlignment" Value="Right" />
+                                <Setter Property="Margin" Value="0,0,10,0" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Foreground" Value="#2563EB" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <Border
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            Padding="15,12"
+            Background="White"
+            CornerRadius="8">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.08"
+                    ShadowDepth="2"
+                    Color="Gray" />
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="14"
+                    Foreground="#4B5563"
+                    Text="ВСЕГО ПОЗИЦИЙ:" />
+
+                <TextBlock
+                    x:Name="TotalCountTextBlock"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Black"
+                    FontSize="18"
+                    Foreground="#2563EB"
+                    Text="0" />
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

@@ -17,10 +17,17 @@
     mc:Ignorable="d">
 
     <Border
-        Background="#FFFAF0"
-        BorderBrush="#D5D2CA"
-        BorderThickness="2"
-        CornerRadius="12">
+        Background="#F3F4F6"
+        BorderBrush="#D1D5DB"
+        BorderThickness="1"
+        CornerRadius="8">
+        <Border.Effect>
+            <DropShadowEffect
+                BlurRadius="20"
+                Opacity="0.15"
+                ShadowDepth="5"
+                Color="Black" />
+        </Border.Effect>
 
         <Grid>
             <Grid.RowDefinitions>
@@ -28,11 +35,10 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Верхняя панель  -->
             <Border
                 Grid.Row="0"
-                Background="#151719"
-                CornerRadius="11,11,0,0"
+                Background="#1E293B"
+                CornerRadius="7,7,0,0"
                 MouseLeftButtonDown="WindowHeader_MouseLeftButtonDown">
 
                 <Grid>
@@ -76,7 +82,6 @@
                 </Grid>
             </Border>
 
-            <!--  Основная область  -->
             <Grid Grid.Row="1" Margin="30,0,30,35">
 
                 <Grid.RowDefinitions>
@@ -85,59 +90,61 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!--  Логотип и название  -->
                 <StackPanel
                     Grid.Row="0"
-                    Margin="0,0,0,10"
+                    Margin="0,20,0,10"
                     HorizontalAlignment="Center">
 
                     <TextBlock
                         Margin="0,12,0,3"
                         HorizontalAlignment="Center"
-                        FontSize="27"
-                        FontWeight="Black"
-                        Foreground="#151719"
+                        FontFamily="Segoe UI Black"
+                        FontSize="32"
+                        Foreground="#2563EB"
                         Text="MyERP" />
 
                     <TextBlock
                         HorizontalAlignment="Center"
                         FontSize="12"
                         FontWeight="SemiBold"
-                        Foreground="#777777"
-                        Text="Система учёта поставок и продаж торгового предприятия" />
+                        Foreground="#6B7280"
+                        Text="Система учёта поставок и продаж" />
                 </StackPanel>
 
-                <!--  Карточка авторизации  -->
                 <Border
                     Grid.Row="1"
-                    Padding="25"
+                    Padding="30"
                     VerticalAlignment="Center"
-                    Background="#FFFAF0"
-                    BorderBrush="#E2DED5"
-                    BorderThickness="1"
+                    Background="White"
                     CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="15"
+                            Opacity="0.1"
+                            ShadowDepth="2"
+                            Color="Gray" />
+                    </Border.Effect>
 
                     <StackPanel>
 
                         <TextBlock
                             Margin="0,0,0,5"
                             FontFamily="Segoe UI Black"
-                            FontSize="19"
+                            FontSize="20"
                             Foreground="#151719"
                             Text="ВХОД В СИСТЕМУ" />
 
                         <TextBlock
-                            Margin="0,0,0,22"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#888888"
+                            Margin="0,0,0,25"
+                            FontSize="13"
+                            Foreground="#6B7280"
                             Text="Введите данные своей учётной записи" />
 
                         <TextBlock
                             Margin="0,0,0,7"
                             FontSize="12"
-                            FontWeight="Bold"
-                            Foreground="#333333"
+                            FontWeight="SemiBold"
+                            Foreground="#4B5563"
                             Text="Логин" />
 
                         <TextBox
@@ -145,8 +152,8 @@
                             Height="42"
                             Padding="12,0"
                             VerticalContentAlignment="Center"
-                            Background="#FFFAF0"
-                            BorderBrush="#D5D2CA"
+                            Background="#F9FAFB"
+                            BorderBrush="#D1D5DB"
                             BorderThickness="1"
                             FontSize="14"
                             Foreground="#151719"
@@ -156,8 +163,8 @@
                         <TextBlock
                             Margin="0,18,0,7"
                             FontSize="12"
-                            FontWeight="Bold"
-                            Foreground="#333333"
+                            FontWeight="SemiBold"
+                            Foreground="#4B5563"
                             Text="Пароль" />
 
                         <PasswordBox
@@ -165,8 +172,8 @@
                             Height="42"
                             Padding="12,0"
                             VerticalContentAlignment="Center"
-                            Background="#FFFAF0"
-                            BorderBrush="#D5D2CA"
+                            Background="#F9FAFB"
+                            BorderBrush="#D1D5DB"
                             BorderThickness="1"
                             FontSize="14"
                             Foreground="#151719"
@@ -176,55 +183,24 @@
                         <Button
                             x:Name="LoginButton"
                             Height="45"
-                            Margin="0,25,0,0"
-                            Background="#151719"
-                            BorderThickness="0"
+                            Margin="0,18,0,0"
                             Click="LoginButton_Click"
                             Content="ВОЙТИ В СИСТЕМУ"
-                            Cursor="Hand"
                             FontFamily="Segoe UI Black"
-                            FontSize="13"
-                            Foreground="White">
-
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border
-                                        x:Name="ButtonBorder"
-                                        Background="{TemplateBinding Background}"
-                                        CornerRadius="6">
-
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#303943" />
-                                        </Trigger>
-
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#434D58" />
-                                        </Trigger>
-
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                            FontSize="14"
+                            Style="{StaticResource BtnPrimary}" />
 
                     </StackPanel>
                 </Border>
 
-                <!--  Нижняя подпись  -->
                 <TextBlock
                     Grid.Row="2"
                     Margin="0,18,0,0"
                     HorizontalAlignment="Center"
                     FontSize="11"
                     FontWeight="SemiBold"
-                    Foreground="#999999"
-                    Text="MyERP" />
+                    Foreground="#9CA3AF"
+                    Text="MyERP v2026" />
             </Grid>
         </Grid>
     </Border>

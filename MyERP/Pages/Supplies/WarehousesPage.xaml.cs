@@ -1,6 +1,7 @@
 ﻿using MyERP.Classes;
 using MySqlConnector;
 using System;
+using MyERP.Pages;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
@@ -115,6 +116,31 @@ namespace MyERP.Pages.Supplies
             WarehousesDataGrid.SelectedItem = newWarehouseRow;
             WarehousesDataGrid.ScrollIntoView(newWarehouseRow);
             SaveWarehouseButton.Visibility = Visibility.Visible;
+        }
+
+        private void OpenWarehouseDetailsButton_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView selectedRow = WarehousesDataGrid.SelectedItem as DataRowView;
+
+            if (selectedRow == null)
+            {
+                MessageBox.Show("Выберите склад.", "Информация",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Несохранённая (новая) строка — открывать нечего
+            if (selectedRow["Id"] == DBNull.Value)
+            {
+                MessageBox.Show("Сначала сохраните склад, чтобы просмотреть остатки.",
+                    "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            int warehouseId = Convert.ToInt32(selectedRow["Id"]);
+
+            if (NavigationService != null)
+                NavigationService.Navigate(new StockPage(warehouseId));
         }
 
         private void DeleteWarehouseButton_Click(object sender, RoutedEventArgs e)

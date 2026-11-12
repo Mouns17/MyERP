@@ -12,19 +12,19 @@
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None">
-    <Border Background="#DCDCDC">
+
+    <Border Background="#F3F4F6">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
                 <RowDefinition Height="40" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid
                 Grid.Row="0"
-                Background="#151719"
+                Background="#1E293B"
                 MouseLeftButtonDown="WindowHeader_MouseLeftButtonDown">
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -32,7 +32,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel
-                    Margin="20,0,0,0"
+                    Margin="15,0,0,0"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
                     <TextBlock
@@ -40,7 +40,7 @@
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="White"
-                        Text="MyERP | Учет поставок и продаж в торговой фирме" />
+                        Text="MyERP | Учет поставок и продаж" />
                 </StackPanel>
 
                 <StackPanel
@@ -48,128 +48,95 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-
                     <TextBlock
                         x:Name="UserRoleTextBlock"
-                        HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         FontSize="13"
-                        FontWeight="SemiBold"
-                        Foreground="White"
+                        Foreground="#94A3B8"
                         Text="Пользователь" />
-
                     <Button
-                        Margin="10,0,0,0"
+                        Height="40"
+                        Margin="15,0,10,0"
                         Click="Button_Click"
                         Content="⏻"
                         FontWeight="Bold"
                         Style="{StaticResource WindowControlButtonStyle}" />
-
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                     <Button
+                        Height="40"
                         Click="MinimizeButton_Click"
                         Content="➖"
                         Style="{StaticResource WindowControlButtonStyle}" />
                     <Button
                         x:Name="MaximizeButton"
+                        Height="40"
                         Click="MaximizeButton_Click"
                         Content="🔲"
                         Style="{StaticResource WindowControlButtonStyle}" />
                     <Button
+                        Height="40"
                         Click="CloseButton_Click"
                         Content="✖︎"
                         Style="{StaticResource WindowCloseButtonStyle}" />
                 </StackPanel>
             </Grid>
-            <Grid
-                Grid.Row="1"
-                Margin="0,3,0,0"
-                Background="#FFFAF0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Margin="10,0,10,0">
+            <Border
+                Grid.Row="1"
+                Background="White"
+                BorderBrush="#E5E7EB"
+                BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
                     <TextBlock
-                        Margin="19,12,0,0"
-                        HorizontalAlignment="Left"
+                        Grid.Column="0"
+                        Margin="20,0,0,0"
+                        VerticalAlignment="Center"
                         FontFamily="Segoe UI Black"
                         FontSize="12"
-                        Foreground="Gray"
+                        Foreground="#9CA3AF"
                         Text="РАЗДЕЛЫ" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="1"
-                    Margin="0,0,10,0"
-                    Orientation="Horizontal">
-                    <Button
-                        x:Name="Обзор"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Обзор_Click"
-                        Content="🔎 ОБЗОР"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
-                        x:Name="Товары"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Товары_Click"
-                        Content="🏷️ ТОВАРЫ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
-                        x:Name="Поставки"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Поставки_Click"
-                        Content="📥 ПОСТАВКИ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
-                        x:Name="Продажи"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Продажи_Click"
-                        Content="🛒 ПРОДАЖИ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                    <Button
-                        x:Name="Пользователи"
-                        Width="130"
-                        Height="37"
-                        HorizontalAlignment="Left"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Click="Пользователи_Click"
-                        Content="👤 ПОЛЬЗОВАТЕЛИ"
-                        FontWeight="Bold"
-                        Foreground="#151719" />
-                </StackPanel>
-            </Grid>
 
-            <Grid Grid.Row="2">
-                <Border Margin="10,10,10,0" Background="#FFFAF0">
-                    <Frame
-                        x:Name="MainFrame"
-                        Background="Transparent"
-                        NavigationUIVisibility="Hidden" />
-                </Border>
+                    <StackPanel
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            x:Name="Товары"
+                            Click="Товары_Click"
+                            Content="🏷️ ТОВАРЫ"
+                            Style="{StaticResource TopNavButtonStyle}"
+                            Tag="Active" />
+                        <Button
+                            x:Name="Поставки"
+                            Click="Поставки_Click"
+                            Content="📥 ПОСТАВКИ"
+                            Style="{StaticResource TopNavButtonStyle}" />
+                        <Button
+                            x:Name="Продажи"
+                            Click="Продажи_Click"
+                            Content="🛒 ПРОДАЖИ"
+                            Style="{StaticResource TopNavButtonStyle}" />
+                        <Button
+                            x:Name="Пользователи"
+                            Click="Пользователи_Click"
+                            Content="👤 ПОЛЬЗОВАТЕЛИ"
+                            Style="{StaticResource TopNavButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="2" Background="#F3F4F6">
+                <Frame
+                    x:Name="MainFrame"
+                    Background="Transparent"
+                    NavigationUIVisibility="Hidden" />
             </Grid>
         </Grid>
     </Border>

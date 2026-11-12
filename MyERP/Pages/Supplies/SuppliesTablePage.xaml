@@ -2,16 +2,25 @@
     x:Class="MyERP.Pages.Supplies.SuppliesTablePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Background="#FFFAF0"
+    Background="#F3F4F6"
     FontFamily="Segoe UI">
 
-    <Grid Margin="12">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,15"
+            FontFamily="Segoe UI Black"
+            FontSize="22"
+            Foreground="#151719"
+            Text="ПОСТАВКИ" />
+
+        <Grid Grid.Row="1" Margin="0,0,0,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" />
                 <ColumnDefinition Width="*" />
@@ -20,17 +29,16 @@
             <Grid Grid.Column="0">
                 <TextBox
                     x:Name="SearchTextBox"
-                    Padding="8"
+                    Padding="10,8"
                     VerticalContentAlignment="Center"
-                    Background="#FFFAF0"
-                    BorderBrush="#151719"
+                    Background="White"
+                    BorderBrush="#D1D5DB"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
-
                 <TextBlock
-                    Margin="9,0,0,0"
+                    Margin="12,0,0,0"
                     VerticalAlignment="Center"
-                    Foreground="#999999"
+                    Foreground="#9CA3AF"
                     IsHitTestVisible="False"
                     Text="Поиск поставок...">
                     <TextBlock.Style>
@@ -48,113 +56,94 @@
 
             <StackPanel
                 Grid.Column="1"
-                Margin="10,0,0,0"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-
                 <Button
                     Margin="10,0,0,0"
                     Click="AddSuppliesButton_Click"
                     Content="ДОБАВИТЬ"
-                    Style="{StaticResource ButtonStyle}" />
-
+                    Style="{StaticResource BtnPrimary}" />
                 <Button
                     Margin="10,0,0,0"
                     Click="OpenSupplyButton_Click"
                     Content="ПОДРОБНЕЕ"
-                    Style="{StaticResource ButtonStyle}" />
-
+                    Style="{StaticResource BtnSecondary}" />
                 <Button
                     Margin="10,0,0,0"
                     Click="DeleteSuppliesButton_Click"
                     Content="УДАЛИТЬ"
-                    Style="{StaticResource ButtonStyle}" />
+                    Style="{StaticResource BtnDanger}" />
             </StackPanel>
         </Grid>
 
-        <DataGrid
-            x:Name="SuppliesDataGrid"
-            Grid.Row="1"
-            Margin="0,10,0,0"
-            AlternatingRowBackground="#F5F2EA"
-            AutoGenerateColumns="False"
-            Background="#FFFAF0"
-            BorderBrush="#151719"
-            BorderThickness="1"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="False"
-            CanUserResizeColumns="False"
-            CanUserResizeRows="False"
-            CanUserSortColumns="True"
-            ColumnHeaderHeight="40"
-            Foreground="#151719"
-            GridLinesVisibility="All"
-            HeadersVisibility="Column"
-            HorizontalGridLinesBrush="#E5E5E5"
-            IsReadOnly="True"
-            RowBackground="#FFFAF0"
-            RowHeight="32"
-            SelectionMode="Single"
-            SelectionUnit="FullRow"
-            VerticalGridLinesBrush="#E5E5E5">
-
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="#FFFAF0" />
-                    <Setter Property="Foreground" Value="#151719" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="FontSize" Value="13" />
-                </Style>
-            </DataGrid.RowStyle>
-
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#DCDCDC" />
-                    <Setter Property="Foreground" Value="#151719" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="FontSize" Value="14" />
-                    <Setter Property="Height" Value="40" />
-                    <Setter Property="Padding" Value="10,0" />
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="BorderThickness" Value="0,0,1,1" />
-                    <Setter Property="BorderBrush" Value="#C5C5C5" />
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="65"
-                    Binding="{Binding Id}"
-                    Header="№" />
-
-                <DataGridTextColumn
-                    Width="*"
-                    MinWidth="200"
-                    Binding="{Binding Поставщик}"
-                    Header="Поставщик" />
-
-                <DataGridTextColumn
-                    Width="150"
-                    Binding="{Binding Дата, StringFormat={}{0:dd.MM.yyyy}}"
-                    Header="Дата поставки" />
-
-                <DataGridTextColumn
-                    Width="180"
-                    Binding="{Binding Склад}"
-                    Header="Склад" />
-
-                <DataGridTextColumn
-                    Width="150"
-                    Binding="{Binding Сумма, StringFormat={}{0:N2} ₽}"
-                    Header="Сумма" />
-
-                <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding Статус}"
-                    Header="Статус" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border
+            Grid.Row="2"
+            Padding="0"
+            Background="White"
+            CornerRadius="8">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.08"
+                    ShadowDepth="2"
+                    Color="Gray" />
+            </Border.Effect>
+            <DataGrid
+                x:Name="SuppliesDataGrid"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                ColumnHeaderHeight="40"
+                GridLinesVisibility="Horizontal"
+                HorizontalGridLinesBrush="#E5E7EB"
+                IsReadOnly="True"
+                RowHeight="40">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F9FAFB" />
+                        <Setter Property="Foreground" Value="#4B5563" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="Padding" Value="10,0" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="Foreground" Value="#151719" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="65"
+                        Binding="{Binding Id}"
+                        Header="№" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="200"
+                        Binding="{Binding Поставщик}"
+                        Header="Поставщик" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Дата, StringFormat={}{0:dd.MM.yyyy}}"
+                        Header="Дата поставки" />
+                    <DataGridTextColumn
+                        Width="180"
+                        Binding="{Binding Склад}"
+                        Header="Склад" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Сумма, StringFormat={}{0:N2} ₽}"
+                        Header="Сумма" />
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding Статус}"
+                        Header="Статус" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </Page>

@@ -2,8 +2,11 @@
 using MySqlConnector;
 using System;
 using System.Data;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MyERP.Pages.Supplies
 {
@@ -40,6 +43,64 @@ namespace MyERP.Pages.Supplies
             {
                 MessageBox.Show("Не удалось загрузить поставщиков:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void PhoneTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Regex.IsMatch(e.Text, @"^\d+$");
+        }
+
+        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox == null)
+                return;
+
+            if (textBox.Tag != null)
+                return;
+
+            textBox.Tag = true;
+
+            string digits = Regex.Replace(textBox.Text, @"\D", "");
+
+            if (digits.Length > 0 && (digits[0] == '7' || digits[0] == '8'))
+            {
+                digits = digits.Substring(1);
+            }
+
+            if (digits.Length > 10)
+                digits = digits.Substring(0, 10);
+
+            StringBuilder result = new StringBuilder();
+
+            if (digits.Length > 0)
+                result.Append("+7 (");
+
+            result.Append(digits.Substring(0, Math.Min(3, digits.Length)));
+
+            if (digits.Length >= 4)
+                result.Append(") ");
+
+            if (digits.Length > 3)
+                result.Append(digits.Substring(3, Math.Min(3, digits.Length - 3)));
+
+            if (digits.Length >= 7)
+                result.Append("-");
+
+            if (digits.Length > 6)
+                result.Append(digits.Substring(6, Math.Min(2, digits.Length - 6)));
+
+            if (digits.Length >= 9)
+                result.Append("-");
+
+            if (digits.Length > 8)
+                result.Append(digits.Substring(8, Math.Min(2, digits.Length - 8)));
+
+            textBox.Text = result.ToString();
+            textBox.CaretIndex = textBox.Text.Length;
+
+            textBox.Tag = null;
         }
 
         private void AddSupplierButton_Click(object sender, RoutedEventArgs e)

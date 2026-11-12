@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Styles/WindowControlButtonStyle.xaml" />
                 <ResourceDictionary Source="/Styles/WindowCloseButtonStyle.xaml" />
                 <ResourceDictionary Source="/Styles/WindowCloseButtonStyle2.xaml" />
+                <ResourceDictionary Source="/Styles/ModernControls.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

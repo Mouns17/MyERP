@@ -5,17 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MyERP.Pages.Sales"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="#FFFAF0"
+    Background="#F3F4F6"
     FontFamily="Segoe UI"
     mc:Ignorable="d">
 
-    <Grid Margin="12">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="0,0,0,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" />
                 <ColumnDefinition Width="*" />
@@ -24,17 +24,17 @@
             <Grid Grid.Column="0">
                 <TextBox
                     x:Name="SearchTextBox"
-                    Padding="8"
+                    Padding="10,8"
                     VerticalContentAlignment="Center"
-                    Background="#FFFAF0"
-                    BorderBrush="#151719"
+                    Background="White"
+                    BorderBrush="#D1D5DB"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
 
                 <TextBlock
-                    Margin="9,0,0,0"
+                    Margin="12,0,0,0"
                     VerticalAlignment="Center"
-                    Foreground="#999999"
+                    Foreground="#9CA3AF"
                     IsHitTestVisible="False"
                     Text="Поиск продажи...">
                     <TextBlock.Style>
@@ -50,7 +50,6 @@
                 </TextBlock>
             </Grid>
 
-            <!--  Кнопки и фильтры  -->
             <StackPanel
                 Grid.Column="1"
                 Margin="10,0,0,0"
@@ -61,144 +60,100 @@
                     Margin="10,0,0,0"
                     Click="CreateSaleButton_Click"
                     Content="ДОБАВИТЬ"
-                    Style="{StaticResource ButtonStyle}" />
+                    Style="{StaticResource BtnPrimary}" />
 
                 <Button
                     Margin="10,0,0,0"
                     Click="OpenSaleButton_Click"
                     Content="ПОДРОБНЕЕ"
-                    Style="{StaticResource ButtonStyle}" />
+                    Style="{StaticResource BtnSecondary}" />
 
                 <Button
                     Margin="10,0,0,0"
                     Click="DeleteSaleButton_Click"
                     Content="УДАЛИТЬ"
-                    Style="{StaticResource ButtonStyle}" />
+                    Style="{StaticResource BtnDanger}" />
             </StackPanel>
         </Grid>
 
-        <!--  Таблица продаж  -->
-        <DataGrid
-            x:Name="SalesDataGrid"
-            Grid.Row="1"
-            Margin="0,10,0,0"
-            AlternatingRowBackground="#F5F2EA"
-            AutoGenerateColumns="False"
-            Background="#FFFAF0"
-            BorderBrush="#151719"
-            BorderThickness="1"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="False"
-            CanUserResizeColumns="False"
-            CanUserResizeRows="False"
-            CanUserSortColumns="True"
-            ColumnHeaderHeight="40"
-            Foreground="#151719"
-            GridLinesVisibility="All"
-            HeadersVisibility="Column"
-            HorizontalGridLinesBrush="#E5E5E5"
-            IsReadOnly="True"
-            RowBackground="#FFFAF0"
-            RowHeight="32"
-            SelectionMode="Single"
-            SelectionUnit="FullRow"
-            VerticalGridLinesBrush="#E5E5E5">
+        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="0">
+            <Border.Effect>
+                <DropShadowEffect Color="Gray" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
+            </Border.Effect>
+            <DataGrid
+                x:Name="SalesDataGrid"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                CanUserSortColumns="True"
+                ColumnHeaderHeight="40"
+                Foreground="#151719"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="#E5E7EB"
+                IsReadOnly="True"
+                RowHeight="40"
+                SelectionMode="Single"
+                SelectionUnit="FullRow">
 
-            <!--  Стиль строк  -->
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="#FFFAF0" />
-                    <Setter Property="Foreground" Value="#151719" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="FontSize" Value="13" />
-                </Style>
-            </DataGrid.RowStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="Foreground" Value="#151719" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="13" />
+                    </Style>
+                </DataGrid.RowStyle>
 
-            <!--  Стиль заголовков  -->
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#DCDCDC" />
-                    <Setter Property="Foreground" Value="#151719" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="FontSize" Value="14" />
-                    <Setter Property="Height" Value="40" />
-                    <Setter Property="Padding" Value="10,0" />
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="BorderThickness" Value="0,0,1,1" />
-                    <Setter Property="BorderBrush" Value="#C5C5C5" />
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F9FAFB" />
+                        <Setter Property="Foreground" Value="#4B5563" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Padding" Value="10,0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="#E5E7EB" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
 
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#CECECE" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-
-            <!--  Столбцы  -->
-            <DataGrid.Columns>
-
-                <DataGridTextColumn
-                    Width="50"
-                    Binding="{Binding Id}"
-                    Header="№"
-                    IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="TextAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn
-                    Width="120"
-                    Binding="{Binding ДатаПродажи, StringFormat=dd.MM.yyyy}"
-                    Header="Дата"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="*"
-                    MinWidth="180"
-                    Binding="{Binding Покупатель}"
-                    Header="Покупатель"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="180"
-                    Binding="{Binding Склад}"
-                    Header="Склад"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding КоличествоПозиций}"
-                    Header="Позиций"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding ОбщееКоличество, StringFormat=N3}"
-                    Header="Количество"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding Сумма, StringFormat=N2}"
-                    Header="Сумма, ₽"
-                    IsReadOnly="True" />
-
-                <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding Статус}"
-                    Header="Статус"
-                    IsReadOnly="True" />
-
-            </DataGrid.Columns>
-        </DataGrid>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="50" Binding="{Binding Id}" Header="№" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="120" Binding="{Binding ДатаПродажи, StringFormat=dd.MM.yyyy}" Header="Дата" IsReadOnly="True" />
+                    <DataGridTextColumn Width="*" MinWidth="180" Binding="{Binding Покупатель}" Header="Покупатель" IsReadOnly="True" />
+                    <DataGridTextColumn Width="180" Binding="{Binding Склад}" Header="Склад" IsReadOnly="True" />
+                    <DataGridTextColumn Width="100" Binding="{Binding КоличествоПозиций}" Header="Позиций" IsReadOnly="True" />
+                    <DataGridTextColumn Width="130" Binding="{Binding ОбщееКоличество, StringFormat=N3}" Header="Количество" IsReadOnly="True" />
+                    <DataGridTextColumn Width="130" Binding="{Binding Сумма, StringFormat=N2}" Header="Сумма, ₽" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="TextAlignment" Value="Right" />
+                                <Setter Property="Margin" Value="0,0,10,0" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Foreground" Value="#2563EB" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="130" Binding="{Binding Статус}" Header="Статус" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </Page>
