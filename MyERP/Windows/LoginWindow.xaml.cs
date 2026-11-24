@@ -25,20 +25,6 @@ namespace MyERP.Windows
             WindowState = WindowState.Minimized;
         }
 
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-                MaximizeButton.Content = "□";
-            }
-            else
-            {
-                WindowState = WindowState.Maximized;
-                MaximizeButton.Content = "❐";
-            }
-        }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

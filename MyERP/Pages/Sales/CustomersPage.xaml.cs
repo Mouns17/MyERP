@@ -18,6 +18,7 @@ namespace MyERP.Pages.Sales
             InitializeComponent();
             LoadCustomers();
         }
+
         private void LoadCustomers()
         {
             try
@@ -25,16 +26,13 @@ namespace MyERP.Pages.Sales
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"SELECT id_покупателя AS Id, наименование AS Наименование, инн AS ИНН, телефон AS Телефон, электронная_почта AS ЭлПочта, адрес AS Адрес FROM покупатели ORDER BY id_покупателя DESC;";
-
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                     {
                         customersTable = new DataTable();
                         adapter.Fill(customersTable);
                     }
                 }
-
                 CustomersDataGrid.ItemsSource = customersTable.DefaultView;
             }
             catch (Exception ex)
@@ -51,61 +49,32 @@ namespace MyERP.Pages.Sales
         private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-
-            if (textBox == null)
-                return;
-
-            if (textBox.Tag != null)
-                return;
+            if (textBox == null || textBox.Tag != null) return;
 
             textBox.Tag = true;
-
             string digits = Regex.Replace(textBox.Text, @"\D", "");
 
-            if (digits.Length > 0 &&
-                (digits[0] == '7' || digits[0] == '8'))
-            {
-                digits = digits.Substring(1);
-            }
-
-            if (digits.Length > 10)
-                digits = digits.Substring(0, 10);
+            if (digits.Length > 0 && (digits[0] == '7' || digits[0] == '8')) digits = digits.Substring(1);
+            if (digits.Length > 10) digits = digits.Substring(0, 10);
 
             StringBuilder result = new StringBuilder();
-
-            if (digits.Length > 0)
-                result.Append("+7 (");
-
+            if (digits.Length > 0) result.Append("+7 (");
             result.Append(digits.Substring(0, Math.Min(3, digits.Length)));
-
-            if (digits.Length >= 4)
-                result.Append(") ");
-
-            if (digits.Length > 3)
-                result.Append(digits.Substring(3, Math.Min(3, digits.Length - 3)));
-
-            if (digits.Length >= 7)
-                result.Append("-");
-
-            if (digits.Length > 6)
-                result.Append(digits.Substring(6, Math.Min(2, digits.Length - 6)));
-
-            if (digits.Length >= 9)
-                result.Append("-");
-
-            if (digits.Length > 8)
-                result.Append(digits.Substring(8, Math.Min(2, digits.Length - 8)));
+            if (digits.Length >= 4) result.Append(") ");
+            if (digits.Length > 3) result.Append(digits.Substring(3, Math.Min(3, digits.Length - 3)));
+            if (digits.Length >= 7) result.Append("-");
+            if (digits.Length > 6) result.Append(digits.Substring(6, Math.Min(2, digits.Length - 6)));
+            if (digits.Length >= 9) result.Append("-");
+            if (digits.Length > 8) result.Append(digits.Substring(8, Math.Min(2, digits.Length - 8)));
 
             textBox.Text = result.ToString();
             textBox.CaretIndex = textBox.Text.Length;
-
             textBox.Tag = null;
         }
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
             DataRow row = customersTable.NewRow();
-
             row["Id"] = 0;
             row["Наименование"] = "";
             row["ИНН"] = DBNull.Value;
@@ -116,12 +85,14 @@ namespace MyERP.Pages.Sales
             customersTable.Rows.Add(row);
 
             CustomersDataGrid.SelectedItem = customersTable.DefaultView[customersTable.DefaultView.Count - 1];
-
             CustomersDataGrid.ScrollIntoView(CustomersDataGrid.SelectedItem);
+
+            CustomersDataGrid.CurrentCell = new DataGridCellInfo(CustomersDataGrid.SelectedItem, CustomersDataGrid.Columns[1]);
             CustomersDataGrid.BeginEdit();
 
             SaveCustomerButton.Visibility = Visibility.Visible;
         }
+
         private void SaveCustomerButton_Click(object sender, RoutedEventArgs e)
         {
             CustomersDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
@@ -132,49 +103,39 @@ namespace MyERP.Pages.Sales
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
                         try
                         {
                             foreach (DataRow row in customersTable.Rows)
                             {
-                                if (row.RowState == DataRowState.Deleted)
-                                    continue;
+                                if (row.RowState == DataRowState.Deleted) continue;
 
                                 string name = Convert.ToString(row["Наименование"]).Trim();
-
-                                if (string.IsNullOrWhiteSpace(name))
-                                {
-                                    throw new Exception(
-                                        "Наименование покупателя не может быть пустым.");
-                                }
+                                if (string.IsNullOrWhiteSpace(name)) throw new Exception("Наименование покупателя не может быть пустым.");
 
                                 int id = Convert.ToInt32(row["Id"]);
 
                                 if (id == 0)
                                 {
                                     string insertQuery = @"INSERT INTO покупатели (наименование, инн, телефон, электронная_почта, адрес) VALUES (@name, @inn, @phone, @email, @address);";
-
                                     using (MySqlCommand command = new MySqlCommand(insertQuery, connection, transaction))
                                     {
-                                        AddSupplierParameters(command, row);
+                                        AddCustomerParameters(command, row);
                                         command.ExecuteNonQuery();
                                     }
                                 }
                                 else
                                 {
-                                    string updateQuery = @"UPDATE покупатели SET наименование = @name, инн = @inn, телефон = @phone, электронная_почта = @email, адрес = @address WHERE id_поставщика = @id;";
-
+                                    string updateQuery = @"UPDATE покупатели SET наименование = @name, инн = @inn, телефон = @phone, электронная_почта = @email, адрес = @address WHERE id_покупателя = @id;";
                                     using (MySqlCommand command = new MySqlCommand(updateQuery, connection, transaction))
                                     {
-                                        AddSupplierParameters(command, row);
+                                        AddCustomerParameters(command, row);
                                         command.Parameters.AddWithValue("@id", id);
                                         command.ExecuteNonQuery();
                                     }
                                 }
                             }
-
                             transaction.Commit();
                         }
                         catch
@@ -184,9 +145,7 @@ namespace MyERP.Pages.Sales
                         }
                     }
                 }
-
                 MessageBox.Show("Данные покупателей успешно сохранены.", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
-
                 LoadCustomers();
                 SaveCustomerButton.Visibility = Visibility.Collapsed;
             }
@@ -196,7 +155,7 @@ namespace MyERP.Pages.Sales
             }
         }
 
-        private void AddSupplierParameters(MySqlCommand command, DataRow row)
+        private void AddCustomerParameters(MySqlCommand command, DataRow row)
         {
             command.Parameters.AddWithValue("@name", Convert.ToString(row["Наименование"]).Trim());
             command.Parameters.AddWithValue("@inn", GetDatabaseValue(row["ИНН"]));
@@ -207,66 +166,39 @@ namespace MyERP.Pages.Sales
 
         private object GetDatabaseValue(object value)
         {
-            if (value == null || value == DBNull.Value || string.IsNullOrWhiteSpace(Convert.ToString(value)))
-            {
-                return DBNull.Value;
-            }
-
+            if (value == null || value == DBNull.Value || string.IsNullOrWhiteSpace(Convert.ToString(value))) return DBNull.Value;
             return value;
         }
 
         private void DeleteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
             DataRowView selectedRow = CustomersDataGrid.SelectedItem as DataRowView;
-
-            if (selectedRow == null)
-            {
-                MessageBox.Show("Выберите покупателя для удаления.");
-                return;
-            }
+            if (selectedRow == null) { MessageBox.Show("Выберите покупателя для удаления."); return; }
 
             int id = Convert.ToInt32(selectedRow["Id"]);
+            if (id == 0) { selectedRow.Row.Delete(); return; }
 
-            if (id == 0)
-            {
-                selectedRow.Row.Delete();
-                return;
-            }
-
-            MessageBoxResult result = MessageBox.Show("Вы действительно хотите удалить выбранного покупателя?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-            if (result != MessageBoxResult.Yes)
-                return;
+            if (MessageBox.Show("Вы действительно хотите удалить выбранного покупателя?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
 
             try
             {
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
-                    string query = @"DELETE FROM поставщики WHERE id_поставщика = @id;";
-
+                    string query = @"DELETE FROM покупатели WHERE id_покупателя = @id;";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", id);
                         command.ExecuteNonQuery();
                     }
                 }
-
                 LoadCustomers();
-
                 MessageBox.Show("Покупатель удалён.", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (MySqlException ex)
             {
-                if (ex.Number == 1451)
-                {
-                    MessageBox.Show( "Нельзя удалить покупателя, так как с ним связаны документы продаж.", "Удаление невозможно", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                {
-                    MessageBox.Show( "Ошибка базы данных:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                if (ex.Number == 1451) MessageBox.Show("Нельзя удалить покупателя, так как с ним связаны документы продаж.", "Удаление невозможно", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else MessageBox.Show("Ошибка базы данных:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
@@ -274,11 +206,9 @@ namespace MyERP.Pages.Sales
             }
         }
 
-        // Поиск
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (customersTable == null)
-                return;
+            if (customersTable == null) return;
 
             string search = SearchTextBox.Text.Trim();
 
@@ -288,17 +218,8 @@ namespace MyERP.Pages.Sales
                 return;
             }
 
-            search = search.Replace("'", "''")
-                           .Replace("[", "[[]")
-                           .Replace("%", "[%]")
-                           .Replace("*", "[*]");
-
-            customersTable.DefaultView.RowFilter =
-                "Convert([Наименование], 'System.String') LIKE '%" + search + "%' OR " +
-                "Convert([ИНН], 'System.String') LIKE '%" + search + "%' OR " +
-                "Convert([Телефон], 'System.String') LIKE '%" + search + "%' OR " +
-                "Convert([ЭлПочта], 'System.String') LIKE '%" + search + "%' OR " +
-                "Convert([Адрес], 'System.String') LIKE '%" + search + "%'";
+            search = search.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+            customersTable.DefaultView.RowFilter = $"Convert([Наименование], 'System.String') LIKE '%{search}%' OR Convert([ИНН], 'System.String') LIKE '%{search}%' OR Convert([Телефон], 'System.String') LIKE '%{search}%' OR Convert([ЭлПочта], 'System.String') LIKE '%{search}%' OR Convert([Адрес], 'System.String') LIKE '%{search}%'";
         }
     }
 }

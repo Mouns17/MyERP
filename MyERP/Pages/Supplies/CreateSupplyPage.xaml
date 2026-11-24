@@ -2,7 +2,7 @@
     x:Class="MyERP.Pages.Supplies.CreateSupplyPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Background="#FFFAF0"
+    Background="#F3F4F6"
     FontFamily="Segoe UI">
 
     <Grid Margin="20">
@@ -14,11 +14,23 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="0,0,0,15">
-            <TextBlock
-                FontFamily="Segoe UI Black"
-                FontSize="22"
-                Foreground="#151719"
-                Text="ОФОРМЛЕНИЕ ПОСТАВКИ (ПРИХОД)" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    x:Name="TitleTextBlock"
+                    FontFamily="Segoe UI Black"
+                    FontSize="22"
+                    Foreground="#151719"
+                    Text="ОФОРМЛЕНИЕ ПОСТАВКИ (ПРИХОД)" />
+                <TextBlock
+                    x:Name="StatusTextBlock"
+                    Margin="20,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="#EA580C"
+                    Text="Черновик" />
+            </StackPanel>
+
             <Button
                 HorizontalAlignment="Right"
                 Background="#6B7280"
@@ -101,12 +113,14 @@
                         Text="ПРИНЯТЫЕ ТОВАРЫ" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button
+                            x:Name="BtnAddProduct"
                             Margin="0,0,10,0"
                             Background="#4B5563"
                             Click="AddProduct_Click"
                             Content="+ ДОБАВИТЬ ТОВАР"
                             Style="{StaticResource BtnPrimary}" />
                         <Button
+                            x:Name="BtnDeleteProduct"
                             Click="DeleteProduct_Click"
                             Content="УДАЛИТЬ"
                             Style="{StaticResource BtnDanger}" />
@@ -146,7 +160,19 @@
                                         ItemsSource="{Binding DataContext.ProductsList, RelativeSource={RelativeSource AncestorType=Page}}"
                                         SelectedValue="{Binding ProductId, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="Id"
-                                        SelectionChanged="Product_SelectionChanged" />
+                                        SelectionChanged="Product_SelectionChanged">
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="True">
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                        <Setter Property="Background" Value="#F3F4F6" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -185,13 +211,14 @@
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button
+                    x:Name="BtnSaveDraft"
                     Margin="0,0,10,0"
                     Background="#6B7280"
                     Click="SaveDraft_Click"
                     Content="СОХРАНИТЬ ЧЕРНОВИК"
                     Style="{StaticResource BtnPrimary}" />
-                <!--  Кнопка проведения выделена зеленым!  -->
                 <Button
+                    x:Name="BtnPostSupply"
                     Click="PostSupply_Click"
                     Content="ПРОВЕСТИ ПРИХОД"
                     Style="{StaticResource BtnSuccess}" />

@@ -30,7 +30,6 @@
                     BorderBrush="#D1D5DB"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
-
                 <TextBlock
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
@@ -55,19 +54,16 @@
                 Margin="10,0,0,0"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-
                 <Button
                     Margin="10,0,0,0"
                     Click="CreateSaleButton_Click"
                     Content="ДОБАВИТЬ"
                     Style="{StaticResource BtnPrimary}" />
-
                 <Button
                     Margin="10,0,0,0"
                     Click="OpenSaleButton_Click"
                     Content="ПОДРОБНЕЕ"
                     Style="{StaticResource BtnSecondary}" />
-
                 <Button
                     Margin="10,0,0,0"
                     Click="DeleteSaleButton_Click"
@@ -76,9 +72,17 @@
             </StackPanel>
         </Grid>
 
-        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="0">
+        <Border
+            Grid.Row="1"
+            Padding="0"
+            Background="White"
+            CornerRadius="8">
             <Border.Effect>
-                <DropShadowEffect Color="Gray" Opacity="0.08" BlurRadius="10" ShadowDepth="2"/>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.08"
+                    ShadowDepth="2"
+                    Color="Gray" />
             </Border.Effect>
             <DataGrid
                 x:Name="SalesDataGrid"
@@ -100,7 +104,6 @@
                 RowHeight="40"
                 SelectionMode="Single"
                 SelectionUnit="FullRow">
-
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="White" />
@@ -110,7 +113,6 @@
                         <Setter Property="FontSize" Value="13" />
                     </Style>
                 </DataGrid.RowStyle>
-
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#F9FAFB" />
@@ -125,9 +127,12 @@
                         <Setter Property="BorderBrush" Value="#E5E7EB" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
-
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="50" Binding="{Binding Id}" Header="№" IsReadOnly="True">
+                    <DataGridTextColumn
+                        Width="50"
+                        Binding="{Binding Id}"
+                        Header="№"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -135,12 +140,37 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="120" Binding="{Binding ДатаПродажи, StringFormat=dd.MM.yyyy}" Header="Дата" IsReadOnly="True" />
-                    <DataGridTextColumn Width="*" MinWidth="180" Binding="{Binding Покупатель}" Header="Покупатель" IsReadOnly="True" />
-                    <DataGridTextColumn Width="180" Binding="{Binding Склад}" Header="Склад" IsReadOnly="True" />
-                    <DataGridTextColumn Width="100" Binding="{Binding КоличествоПозиций}" Header="Позиций" IsReadOnly="True" />
-                    <DataGridTextColumn Width="130" Binding="{Binding ОбщееКоличество, StringFormat=N3}" Header="Количество" IsReadOnly="True" />
-                    <DataGridTextColumn Width="130" Binding="{Binding Сумма, StringFormat=N2}" Header="Сумма, ₽" IsReadOnly="True">
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding ДатаПродажи, StringFormat=dd.MM.yyyy}"
+                        Header="Дата"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="180"
+                        Binding="{Binding Покупатель}"
+                        Header="Покупатель"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="180"
+                        Binding="{Binding Склад}"
+                        Header="Склад"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding КоличествоПозиций}"
+                        Header="Позиций"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding ОбщееКоличество, StringFormat=N3}"
+                        Header="Количество"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding Сумма, StringFormat=N2}"
+                        Header="Сумма, ₽"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -151,7 +181,11 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="130" Binding="{Binding Статус}" Header="Статус" IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding Статус}"
+                        Header="Статус"
+                        IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

@@ -56,28 +56,31 @@
                         Text="MyERP  |  Авторизация" />
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-
                         <Button
-                            Width="42"
-                            Height="42"
+                            Width="45"
+                            Height="40"
                             Click="MinimizeButton_Click"
-                            Content="➖"
-                            Style="{StaticResource WindowControlButtonStyle}" />
-
+                            Style="{StaticResource WindowControlButtonStyle}">
+                            <Path
+                                Data="M 1,6 L 15,6"
+                                Stroke="White"
+                                StrokeEndLineCap="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="2.5" />
+                        </Button>
                         <Button
-                            x:Name="MaximizeButton"
-                            Width="42"
-                            Height="42"
-                            Click="MaximizeButton_Click"
-                            Content="🔲"
-                            Style="{StaticResource WindowControlButtonStyle}" />
-
-                        <Button
-                            Width="42"
-                            Height="42"
+                            Width="45"
+                            Height="40"
                             Click="CloseButton_Click"
-                            Content="✖︎"
-                            Style="{StaticResource WindowCloseButtonStyle2}" />
+                            Style="{StaticResource WindowCloseButtonStyle2}">
+                            <Path
+                                Data="M 1,1 L 12,12 M 12,1 L 1,12"
+                                Stroke="White"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="2.5" />
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>

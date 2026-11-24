@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.Sharp, Version=6.6.0.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.Sharp.6.6.0\lib\net48\FontAwesome.Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -115,10 +118,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Sales\SaleDetailsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Sales\SalesListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,10 +147,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Supplies\SuppliesTablePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Supplies\SupplyDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -211,9 +206,6 @@
     <Compile Include="Pages\Sales\CustomersPage.xaml.cs">
       <DependentUpon>CustomersPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Sales\SaleDetailsPage.xaml.cs">
-      <DependentUpon>SaleDetailsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Sales\SalesListPage.xaml.cs">
       <DependentUpon>SalesListPage.xaml</DependentUpon>
     </Compile>
@@ -237,9 +229,6 @@
     </Compile>
     <Compile Include="Pages\Supplies\SuppliesTablePage.xaml.cs">
       <DependentUpon>SuppliesTablePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Supplies\SupplyDetailsPage.xaml.cs">
-      <DependentUpon>SupplyDetailsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Supplies\WarehousesPage.xaml.cs">
       <DependentUpon>WarehousesPage.xaml</DependentUpon>

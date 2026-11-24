@@ -36,7 +36,7 @@
                     VerticalAlignment="Center"
                     Foreground="#9CA3AF"
                     IsHitTestVisible="False"
-                    Text="Поиск товара...">
+                    Text="Поиск товара по названию или артикулу...">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -56,21 +56,65 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
 
-                <ComboBox
-                    x:Name="CategoryComboBox"
-                    Width="150"
+                <!--  Выбор категории (появляется только при добавлении)  -->
+                <Grid
+                    x:Name="CategoryGrid"
+                    Width="160"
                     Margin="10,0,0,0"
-                    DisplayMemberPath="Наименование"
-                    SelectedValuePath="Id"
-                    ToolTip="Категории" />
+                    Visibility="Collapsed">
+                    <ComboBox
+                        x:Name="CategoryComboBox"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id"
+                        ToolTip="Категории" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Foreground="#9CA3AF"
+                        IsHitTestVisible="False"
+                        Text="Категория...">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedItem, ElementName=CategoryComboBox}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
 
-                <ComboBox
-                    x:Name="UnitComboBox"
-                    Width="150"
+                <!--  Выбор единицы измерения (появляется только при добавлении)  -->
+                <Grid
+                    x:Name="UnitGrid"
+                    Width="160"
                     Margin="10,0,0,0"
-                    DisplayMemberPath="Наименование"
-                    SelectedValuePath="Id"
-                    ToolTip="Единицы измерения" />
+                    Visibility="Collapsed">
+                    <ComboBox
+                        x:Name="UnitComboBox"
+                        DisplayMemberPath="Наименование"
+                        SelectedValuePath="Id"
+                        ToolTip="Единицы измерения" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Foreground="#9CA3AF"
+                        IsHitTestVisible="False"
+                        Text="Ед. изм...">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedItem, ElementName=UnitComboBox}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
 
                 <Button
                     Margin="10,0,0,0"

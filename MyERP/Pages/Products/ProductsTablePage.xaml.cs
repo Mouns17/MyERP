@@ -28,7 +28,8 @@ namespace MyERP.Pages.Products
                 {
                     connection.Open();
 
-                    string query = @"SELECT t.id_товара AS Id, t.Артикул AS Артикул, t.Наименование AS Наименование, t.Цена AS Цена FROM ТОВАР AS t ORDER BY t.Наименование";
+                    string query = @"SELECT t.id_товара AS Id, t.Артикул AS Артикул, t.Наименование AS Наименование, t.Цена AS Цена 
+                                     FROM ТОВАР AS t ORDER BY t.Наименование";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
@@ -97,7 +98,8 @@ namespace MyERP.Pages.Products
                 {
                     connection.Open();
 
-                    string query = @"INSERT INTO ТОВАР (Артикул, Наименование, Цена, id_категории, id_единицы_измерения) VALUES (@article, @name, @price, @category, @unit)";
+                    string query = @"INSERT INTO ТОВАР (Артикул, Наименование, Цена, id_категории, id_единицы_измерения) 
+                                     VALUES (@article, @name, @price, @category, @unit)";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -115,6 +117,9 @@ namespace MyERP.Pages.Products
 
                 newProductRow = null;
                 SaveProductButton.Visibility = Visibility.Collapsed;
+
+                CategoryGrid.Visibility = Visibility.Collapsed;
+                UnitGrid.Visibility = Visibility.Collapsed;
 
                 LoadProducts();
             }
@@ -144,20 +149,28 @@ namespace MyERP.Pages.Products
             }
 
             newProductRow = productsTable.NewRow();
-
             newProductRow["Id"] = DBNull.Value;
             newProductRow["Наименование"] = "";
             newProductRow["Цена"] = 0;
             newProductRow["Артикул"] = "";
-
             productsTable.Columns["Id"].AllowDBNull = true;
-
             productsTable.Rows.Add(newProductRow);
 
-            ProductsDataGrid.SelectedItem = newProductRow;
-            ProductsDataGrid.ScrollIntoView(newProductRow);
+            DataRowView newRowView = productsTable.DefaultView[productsTable.DefaultView.Count - 1];
+
+            ProductsDataGrid.SelectedItem = newRowView;
+            ProductsDataGrid.ScrollIntoView(newRowView);
+
+            if (ProductsDataGrid.Columns.Count > 1)
+            {
+                ProductsDataGrid.CurrentCell = new DataGridCellInfo(newRowView, ProductsDataGrid.Columns[1]);
+                ProductsDataGrid.BeginEdit();
+            }
 
             SaveProductButton.Visibility = Visibility.Visible;
+
+            CategoryGrid.Visibility = Visibility.Visible;
+            UnitGrid.Visibility = Visibility.Visible;
         }
 
         private void LoadCategories()
@@ -184,7 +197,18 @@ namespace MyERP.Pages.Products
             {
                 connection.Open();
 
-                string query = @"SELECT id_единицы_измерения AS Id, Наименование FROM ЕДИНИЦА_ИЗМЕРЕНИЯ";
+                string query = @"
+            SELECT 
+                id_единицы_измерения AS Id, 
+                CASE наименование
+                    WHEN 'шт' THEN 'Штука (шт)'
+                    WHEN 'кг' THEN 'Килограмм (кг)'
+                    WHEN 'л' THEN 'Литр (л)'
+                    WHEN 'м' THEN 'Метр (м)'
+                    WHEN 'упак' THEN 'Упаковка (упак)'
+                    ELSE наименование
+                END AS Наименование
+            FROM ЕДИНИЦА_ИЗМЕРЕНИЯ";
 
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                 {
@@ -201,13 +225,17 @@ namespace MyERP.Pages.Products
             if (productsTable == null)
                 return;
 
-            string search = SearchTextBox.Text.Trim().Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+            string search = SearchTextBox.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(search))
             {
                 productsTable.DefaultView.RowFilter = "";
                 return;
             }
+
+            search = search.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+
+            productsTable.DefaultView.RowFilter = $"[Наименование] LIKE '%{search}%' OR [Артикул] LIKE '%{search}%'";
         }
 
         private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
@@ -236,6 +264,9 @@ namespace MyERP.Pages.Products
 
                 newProductRow = null;
                 SaveProductButton.Visibility = Visibility.Collapsed;
+
+                CategoryGrid.Visibility = Visibility.Collapsed;
+                UnitGrid.Visibility = Visibility.Collapsed;
 
                 return;
             }

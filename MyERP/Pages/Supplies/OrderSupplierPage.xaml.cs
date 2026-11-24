@@ -25,7 +25,6 @@ namespace MyERP.Pages.Supplies
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"SELECT z.id_заказа AS Id, p.наименование AS Поставщик, z.дата_заказа AS ДатаЗаказа, z.ожидаемая_дата_поставки AS ОжидаемаяДата, s.наименование AS Склад, COALESCE( SUM(tz.количество * tz.закупочная_цена), 0) AS Сумма, st.название AS Статус FROM заказы_поставщикам z LEFT JOIN поставщики p ON z.id_поставщика = p.id_поставщика LEFT JOIN склад s ON z.id_склада = s.id_склада LEFT JOIN статус st ON z.id_статуса = st.id_статуса LEFT JOIN товар_заказ tz ON z.id_заказа = tz.id_заказа GROUP BY z.id_заказа, p.наименование, z.дата_заказа, z.ожидаемая_дата_поставки, s.наименование, st.название ORDER BY z.id_заказа DESC;";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -33,7 +32,6 @@ namespace MyERP.Pages.Supplies
                     {
                         ordersTable = new DataTable();
                         adapter.Fill(ordersTable);
-
                         SupplierOrdersDataGrid.ItemsSource = ordersTable.DefaultView;
                     }
                 }
@@ -58,12 +56,9 @@ namespace MyERP.Pages.Supplies
             }
 
             DataRowView row = SupplierOrdersDataGrid.SelectedItem as DataRowView;
-
-            if (row == null)
-                return;
+            if (row == null) return;
 
             int orderId = Convert.ToInt32(row["Id"]);
-
             NavigationService.Navigate(new CreateOrderSupplierPage(orderId));
         }
 
@@ -76,9 +71,7 @@ namespace MyERP.Pages.Supplies
             }
 
             DataRowView row = SupplierOrdersDataGrid.SelectedItem as DataRowView;
-
-            if (row == null)
-                return;
+            if (row == null) return;
 
             int orderId = Convert.ToInt32(row["Id"]);
             string status = Convert.ToString(row["Статус"]);
@@ -89,17 +82,13 @@ namespace MyERP.Pages.Supplies
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show("Вы действительно хотите отменить заказ №" + orderId + "?", "Отмена заказа", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result != MessageBoxResult.Yes)
-                return;
+            if (MessageBox.Show("Вы действительно хотите отменить заказ №" + orderId + "?", "Отмена заказа", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
 
             try
             {
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"UPDATE заказы_поставщикам SET id_статуса = (SELECT id_статуса FROM статус WHERE название = 'Отменен' LIMIT 1) WHERE id_заказа = @id;";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -114,7 +103,6 @@ namespace MyERP.Pages.Supplies
                         }
                     }
                 }
-
                 MessageBox.Show("Заказ отменён.");
                 LoadOrders();
             }
@@ -124,13 +112,11 @@ namespace MyERP.Pages.Supplies
             }
         }
 
-        private void SearchTextBox_TextChanged(
-            object sender, TextChangedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ordersTable == null)
-                return;
+            if (ordersTable == null) return;
 
-            string search = SearchTextBox.Text.Trim().Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+            string search = SearchTextBox.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(search))
             {
@@ -138,7 +124,8 @@ namespace MyERP.Pages.Supplies
                 return;
             }
 
-            ordersTable.DefaultView.RowFilter = "Convert(Id, 'System.String') LIKE '%" + search + "%' OR " + "Поставщик LIKE '%" + search + "%' OR " + "Склад LIKE '%" + search + "%' OR " + "Статус LIKE '%" + search + "%'";
+            search = search.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+            ordersTable.DefaultView.RowFilter = $"Convert([Id], 'System.String') LIKE '%{search}%' OR Convert([Поставщик], 'System.String') LIKE '%{search}%' OR Convert([Склад], 'System.String') LIKE '%{search}%' OR Convert([Статус], 'System.String') LIKE '%{search}%'";
         }
     }
 }

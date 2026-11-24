@@ -17,7 +17,7 @@ namespace MyERP.Pages.Supplies
         public ObservableCollection<ProductRow> Products { get; set; } = new ObservableCollection<ProductRow>();
         public List<Item> ProductsList { get; set; } = new List<Item>();
 
-        private int currentOrderId = 0; 
+        private int currentOrderId = 0;
 
         public CreateOrderSupplierPage() : this(0) { }
 
@@ -33,10 +33,11 @@ namespace MyERP.Pages.Supplies
             ProductsDataGrid.ItemsSource = Products;
             Products.CollectionChanged += (s, e) => RecalculateTotal();
 
-            LoadData(); 
+            LoadData();
 
             if (currentOrderId > 0)
             {
+                TitleTextBlock.Text = $"ЗАКАЗ ПОСТАВЩИКУ №{currentOrderId}";
                 LoadOrderForEdit(currentOrderId);
             }
         }
@@ -83,9 +84,12 @@ namespace MyERP.Pages.Supplies
                 using (var conn = DataBaseClass.GetConnection())
                 {
                     conn.Open();
+                    string statusName = "";
 
-                    string sqlOrder = @"SELECT id_поставщика, id_склада, дата_заказа, ожидаемая_дата_поставки, id_статуса 
-                                        FROM заказы_поставщикам WHERE id_заказа = @id";
+                    string sqlOrder = @"SELECT z.id_поставщика, z.id_склада, z.дата_заказа, z.ожидаемая_дата_поставки, st.название AS status 
+                                        FROM заказы_поставщикам z 
+                                        JOIN статус st ON z.id_статуса = st.id_статуса 
+                                        WHERE z.id_заказа = @id";
                     using (var cmd = new MySqlCommand(sqlOrder, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", orderId);
@@ -98,6 +102,7 @@ namespace MyERP.Pages.Supplies
                                 OrderDatePicker.SelectedDate = Convert.ToDateTime(reader["дата_заказа"]);
                                 ExpectedDatePicker.SelectedDate = reader["ожидаемая_дата_поставки"] != DBNull.Value
                                     ? Convert.ToDateTime(reader["ожидаемая_дата_поставки"]) : (DateTime?)null;
+                                statusName = reader["status"].ToString();
                             }
                         }
                     }
@@ -123,11 +128,40 @@ namespace MyERP.Pages.Supplies
                         }
                     }
                     RecalculateTotal();
+                    ConfigureUIForStatus(statusName);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка загрузки заказа:\n" + ex.Message);
+            }
+        }
+
+        private void ConfigureUIForStatus(string statusName)
+        {
+            StatusTextBlock.Text = statusName;
+
+            if (statusName == "Проведен")
+            {
+                StatusTextBlock.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#16A34A");
+            }
+            else if (statusName == "Отменен")
+            {
+                StatusTextBlock.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DC2626");
+            }
+
+            if (statusName != "Черновик")
+            {
+                SupplierComboBox.IsEnabled = false;
+                WarehouseComboBox.IsEnabled = false;
+                OrderDatePicker.IsEnabled = false;
+                ExpectedDatePicker.IsEnabled = false;
+                ProductsDataGrid.IsReadOnly = true;
+
+                BtnAddProduct.Visibility = Visibility.Collapsed;
+                BtnDeleteProduct.Visibility = Visibility.Collapsed;
+                BtnSaveDraft.Visibility = Visibility.Collapsed;
+                BtnCreateOrder.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -161,8 +195,8 @@ namespace MyERP.Pages.Supplies
             TotalTextBlock.Text = total.ToString("N2") + " ₽";
         }
 
-        private void SaveDraft_Click(object sender, RoutedEventArgs e) => SaveOrder(1); 
-        private void CreateOrder_Click(object sender, RoutedEventArgs e) => SaveOrder(2); 
+        private void SaveDraft_Click(object sender, RoutedEventArgs e) => SaveOrder(1);
+        private void CreateOrder_Click(object sender, RoutedEventArgs e) => SaveOrder(2);
 
         private void SaveOrder(int statusId)
         {
@@ -248,31 +282,5 @@ namespace MyERP.Pages.Supplies
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) => NavigationService?.GoBack();
-    }
-
-    public class ProductRow : INotifyPropertyChanged
-    {
-        public int RowNumber { get; set; }
-
-        private int _prodId;
-        public int ProductId { get => _prodId; set { _prodId = value; Notify(); } }
-
-        private decimal _qty;
-        public decimal Quantity { get => _qty; set { _qty = value; Notify(); Notify(nameof(Total)); } }
-
-        private decimal _price;
-        public decimal Price { get => _price; set { _price = value; Notify(); Notify(nameof(Total)); } }
-
-        public decimal Total => Quantity * Price;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void Notify([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
-    public class Item
-    {
-        public int Id { get; set; }
-        public string Наименование { get; set; }
-        public decimal Price { get; set; }
     }
 }

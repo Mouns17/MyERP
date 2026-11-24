@@ -24,7 +24,6 @@ namespace MyERP.Pages.Sales
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"SELECT p.id_продажи AS Id, p.дата_продажи AS ДатаПродажи, pok.наименование AS Покупатель, s.наименование AS Склад, COUNT(DISTINCT tp.id_товар_продажи) AS КоличествоПозиций, COALESCE(SUM(tp.количество), 0) AS ОбщееКоличество, COALESCE(SUM(tp.количество * tp.цена_продажи), 0) AS Сумма, st.название AS Статус FROM продажи p INNER JOIN покупатели pok ON pok.id_покупателя = p.id_покупателя INNER JOIN склад s ON s.id_склада = p.id_склада INNER JOIN статус st ON st.id_статуса = p.id_статуса LEFT JOIN товар_продажа tp ON tp.id_продажи = p.id_продажи GROUP BY p.id_продажи, p.дата_продажи, pok.наименование, s.наименование, st.название ORDER BY p.id_продажи DESC;";
 
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
@@ -42,7 +41,7 @@ namespace MyERP.Pages.Sales
                     if (row["ДатаПродажи"] != DBNull.Value)
                     {
                         DateTime date = Convert.ToDateTime(row["ДатаПродажи"]);
-                        row["ДатаДляПоиска"] = date.ToString("dd.MM.yyyy"); 
+                        row["ДатаДляПоиска"] = date.ToString("dd.MM.yyyy");
                     }
                 }
 
@@ -58,10 +57,10 @@ namespace MyERP.Pages.Sales
         {
             return value.Replace("'", "''").Replace("]", "[]]").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
         }
+
         private void ApplyFilters()
         {
-            if (salesTable == null || SearchTextBox == null)
-                return;
+            if (salesTable == null || SearchTextBox == null) return;
 
             string search = SearchTextBox.Text.Trim();
             string filter = "";
@@ -69,7 +68,6 @@ namespace MyERP.Pages.Sales
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = EscapeFilterValue(search);
-
                 filter = "Convert([Покупатель], 'System.String') LIKE '%" + search + "%' OR Convert([ДатаДляПоиска], 'System.String') LIKE '%" + search + "%'";
             }
 
@@ -82,16 +80,6 @@ namespace MyERP.Pages.Sales
             ApplyFilters();
         }
 
-        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ApplyFilters();
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadSales();
-        }
-
         private void CreateSaleButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new CreateSalePage());
@@ -100,7 +88,6 @@ namespace MyERP.Pages.Sales
         private void OpenSaleButton_Click(object sender, RoutedEventArgs e)
         {
             DataRowView selectedRow = SalesDataGrid.SelectedItem as DataRowView;
-
             if (selectedRow == null)
             {
                 MessageBox.Show("Выберите продажу.");
@@ -108,7 +95,8 @@ namespace MyERP.Pages.Sales
             }
 
             int saleId = Convert.ToInt32(selectedRow["Id"]);
-            NavigationService.Navigate(new SaleDetailsPage(saleId));
+
+            NavigationService.Navigate(new CreateSalePage(saleId));
         }
 
         private void DeleteSaleButton_Click(object sender, RoutedEventArgs e)
@@ -116,38 +104,26 @@ namespace MyERP.Pages.Sales
             Button button = sender as Button;
             DataRowView selectedRow = null;
 
-            if (button != null)
-                selectedRow = button.Tag as DataRowView;
+            if (button != null) selectedRow = button.Tag as DataRowView;
+            if (selectedRow == null) selectedRow = SalesDataGrid.SelectedItem as DataRowView;
 
-            if (selectedRow == null)
-                selectedRow = SalesDataGrid.SelectedItem as DataRowView;
-
-            if (selectedRow == null)
-            {
-                MessageBox.Show("Выберите продажу для удаления.");
-                return;
-            }
+            if (selectedRow == null) { MessageBox.Show("Выберите продажу для удаления."); return; }
 
             int saleId = Convert.ToInt32(selectedRow["Id"]);
-
-            if (MessageBox.Show("Вы действительно хотите удалить продажу №" + saleId + "?\n\nВсе товарные позиции этой продажи также будут удалены.", "Удаление продажи", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
-                return;
+            if (MessageBox.Show("Вы действительно хотите удалить продажу №" + saleId + "?\n\nВсе товарные позиции этой продажи также будут удалены.", "Удаление продажи", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
 
             try
             {
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = "DELETE FROM продажи WHERE id_продажи = @id;";
-
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", saleId);
                         command.ExecuteNonQuery();
                     }
                 }
-
                 MessageBox.Show("Продажа успешно удалена.", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadSales();
             }

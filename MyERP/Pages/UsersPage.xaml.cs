@@ -11,6 +11,7 @@ namespace MyERP.Pages
     {
         private DataTable usersTable;
         private DataTable rolesTable;
+
         public UsersPage()
         {
             InitializeComponent();
@@ -25,16 +26,13 @@ namespace MyERP.Pages
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"SELECT id_роли AS Id, Название AS Название FROM Роль ORDER BY Название";
-
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                     {
                         rolesTable = new DataTable();
                         adapter.Fill(rolesTable);
                     }
                 }
-
                 UserRoleColumn.ItemsSource = rolesTable.DefaultView;
             }
             catch (Exception ex)
@@ -50,9 +48,7 @@ namespace MyERP.Pages
                 using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     string query = @"SELECT u.id_пользователя AS Id, u.Имя AS Имя, u.Логин AS Логин, u.Пароль AS Пароль, u.id_роли AS id_роли, r.Название AS Роль FROM ПОЛЬЗОВАТЕЛИ AS u LEFT JOIN Роль AS r ON u.id_роли = r.id_роли ORDER BY u.Имя";
-
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                     {
                         usersTable = new DataTable();
@@ -61,7 +57,6 @@ namespace MyERP.Pages
                 }
 
                 usersTable.Columns["Id"].AllowDBNull = true;
-
                 UsersDataGrid.ItemsSource = usersTable.DefaultView;
             }
             catch (Exception ex)
@@ -72,8 +67,7 @@ namespace MyERP.Pages
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (usersTable == null)
-                return;
+            if (usersTable == null) return;
 
             string search = SearchTextBox.Text.Trim();
 
@@ -83,16 +77,13 @@ namespace MyERP.Pages
                 return;
             }
 
-            search = search.Replace("'", "''");
-            search = search.Replace("[", "[[]");
-
-            usersTable.DefaultView.RowFilter = "[Имя] LIKE '%" + search + "%' OR " + "[Логин] LIKE '%" + search + "%'";
+            search = search.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+            usersTable.DefaultView.RowFilter = $"[Имя] LIKE '%{search}%' OR [Логин] LIKE '%{search}%'";
         }
 
         private void AddUserButton_Click(object sender, RoutedEventArgs e)
         {
-            if (usersTable == null || rolesTable == null)
-                return;
+            if (usersTable == null || rolesTable == null) return;
 
             if (rolesTable.Rows.Count == 0)
             {
@@ -114,11 +105,14 @@ namespace MyERP.Pages
             newRow["id_роли"] = DBNull.Value;
             newRow["Роль"] = "";
             usersTable.Rows.Add(newRow);
+
             SearchTextBox.Text = "";
             UsersDataGrid.SelectedItem = usersTable.DefaultView[usersTable.DefaultView.Count - 1];
             UsersDataGrid.ScrollIntoView(UsersDataGrid.SelectedItem);
+
             UsersDataGrid.CurrentCell = new DataGridCellInfo(UsersDataGrid.SelectedItem, UsersDataGrid.Columns[1]);
             UsersDataGrid.BeginEdit();
+
             SaveUserButton.Visibility = Visibility.Visible;
         }
 
@@ -126,86 +120,50 @@ namespace MyERP.Pages
         {
             foreach (DataRow row in usersTable.Rows)
             {
-                if (row.RowState == DataRowState.Deleted)
-                    continue;
-
-                if (row["Id"] == DBNull.Value)
-                    return true;
+                if (row.RowState == DataRowState.Deleted) continue;
+                if (row["Id"] == DBNull.Value) return true;
             }
-
             return false;
         }
 
         private void SaveUserButton_Click(object sender, RoutedEventArgs e)
         {
             UsersDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-
             UsersDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
 
-            if (usersTable == null)
-                return;
+            if (usersTable == null) return;
 
             foreach (DataRow row in usersTable.Rows)
             {
-                if (row.RowState == DataRowState.Deleted)
-                    continue;
-
-                if (row["Id"] != DBNull.Value)
-                    continue;
+                if (row.RowState == DataRowState.Deleted) continue;
+                if (row["Id"] != DBNull.Value) continue;
 
                 string name = Convert.ToString(row["Имя"]).Trim();
-
                 string login = Convert.ToString(row["Логин"]).Trim();
-
                 string password = Convert.ToString(row["Пароль"]).Trim();
 
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    MessageBox.Show("Введите имя пользователя.");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(login))
-                {
-                    MessageBox.Show("Введите логин.");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(password))
-                {
-                    MessageBox.Show("Введите пароль.");
-                    return;
-                }
-
-                if (row["id_роли"] == DBNull.Value)
-                {
-                    MessageBox.Show("Выберите роль пользователя.");
-                    return;
-                }
+                if (string.IsNullOrWhiteSpace(name)) { MessageBox.Show("Введите имя пользователя."); return; }
+                if (string.IsNullOrWhiteSpace(login)) { MessageBox.Show("Введите логин."); return; }
+                if (string.IsNullOrWhiteSpace(password)) { MessageBox.Show("Введите пароль."); return; }
+                if (row["id_роли"] == DBNull.Value) { MessageBox.Show("Выберите роль пользователя."); return; }
             }
 
             MySqlTransaction transaction = null;
 
             try
             {
-                using (MySqlConnection connection =
-                    DataBaseClass.GetConnection())
+                using (MySqlConnection connection = DataBaseClass.GetConnection())
                 {
                     connection.Open();
-
                     transaction = connection.BeginTransaction();
-
                     string query = @"INSERT INTO ПОЛЬЗОВАТЕЛИ (Имя, Логин, Пароль, id_роли) VALUES (@name, @login, @password, @role)";
 
                     foreach (DataRow row in usersTable.Rows)
                     {
-                        if (row.RowState == DataRowState.Deleted)
-                            continue;
+                        if (row.RowState == DataRowState.Deleted) continue;
+                        if (row["Id"] != DBNull.Value) continue;
 
-                        if (row["Id"] != DBNull.Value)
-                            continue;
-
-                        using (MySqlCommand command = new MySqlCommand( query, connection, transaction))
+                        using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
                         {
                             command.Parameters.AddWithValue("@name", Convert.ToString(row["Имя"]).Trim());
                             command.Parameters.AddWithValue("@login", Convert.ToString(row["Логин"]).Trim());
@@ -223,16 +181,7 @@ namespace MyERP.Pages
             }
             catch (Exception ex)
             {
-                if (transaction != null)
-                {
-                    try
-                    {
-                        transaction.Rollback();
-                    }
-                    catch
-                    {
-                    }
-                }
+                if (transaction != null) { try { transaction.Rollback(); } catch { } }
                 MessageBox.Show("Не удалось сохранить пользователей:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -243,14 +192,9 @@ namespace MyERP.Pages
             DataRowView selectedRow = null;
 
             if (button != null) selectedRow = button.Tag as DataRowView;
-
             if (selectedRow == null) selectedRow = UsersDataGrid.SelectedItem as DataRowView;
 
-            if (selectedRow == null)
-            {
-                MessageBox.Show("Выберите пользователя для удаления.");
-                return;
-            }
+            if (selectedRow == null) { MessageBox.Show("Выберите пользователя для удаления."); return; }
 
             if (selectedRow["Id"] == DBNull.Value)
             {
@@ -260,7 +204,6 @@ namespace MyERP.Pages
             }
 
             int userId = Convert.ToInt32(selectedRow["Id"]);
-
             string userName = Convert.ToString(selectedRow["Имя"]);
 
             if (userId == UserSession.UserId)
@@ -269,10 +212,7 @@ namespace MyERP.Pages
                 return;
             }
 
-            if (MessageBox.Show("Вы действительно хотите удалить пользователя \"" + userName + "\"?", "Удаление пользователя", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
-            {
-                return;
-            }
+            if (MessageBox.Show("Вы действительно хотите удалить пользователя \"" + userName + "\"?", "Удаление пользователя", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
 
             try
             {
@@ -280,27 +220,19 @@ namespace MyERP.Pages
                 {
                     connection.Open();
                     string query = @"DELETE FROM пользователи WHERE id_пользователя = @id;";
-
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", userId);
                         command.ExecuteNonQuery();
                     }
                 }
-
                 MessageBox.Show("Пользователь успешно удалён.", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadUsers();
             }
             catch (MySqlException ex)
             {
-                if (ex.Number == 1451)
-                {
-                    MessageBox.Show("Невозможно удалить пользователя, поскольку за ним " + "закреплены поставки, продажи или заказы.", "Удаление невозможно", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                {
-                    MessageBox.Show("Ошибка удаления пользователя:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                if (ex.Number == 1451) MessageBox.Show("Невозможно удалить пользователя, поскольку за ним закреплены поставки, продажи или заказы.", "Удаление невозможно", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else MessageBox.Show("Ошибка удаления пользователя:\n" + ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {

@@ -3,8 +3,10 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,21 +17,27 @@ namespace MyERP.Pages.Supplies
         public ObservableCollection<ProductRow> Products { get; set; } = new ObservableCollection<ProductRow>();
         public List<Item> ProductsList { get; set; } = new List<Item>();
 
-        public CreateSupplyPage(int userId) : this()
-        {
-           
-        }
+        private int currentSupplyId = 0;
 
-        public CreateSupplyPage()
+        public CreateSupplyPage() : this(0) { }
+
+        public CreateSupplyPage(int supplyId)
         {
             InitializeComponent();
             DataContext = this;
+            currentSupplyId = supplyId;
 
             SupplyDatePicker.SelectedDate = DateTime.Today;
-
             ProductsDataGrid.ItemsSource = Products;
-            LoadData();
             Products.CollectionChanged += (s, e) => RecalculateTotal();
+
+            LoadData();
+
+            if (currentSupplyId > 0)
+            {
+                TitleTextBlock.Text = $"ПОСТАВКА №{currentSupplyId}";
+                LoadSupplyForEdit(currentSupplyId);
+            }
         }
 
         private void LoadData()
@@ -66,6 +74,90 @@ namespace MyERP.Pages.Supplies
             }
         }
 
+        private void LoadSupplyForEdit(int id)
+        {
+            try
+            {
+                using (var conn = DataBaseClass.GetConnection())
+                {
+                    conn.Open();
+
+                    string sqlSupply = @"SELECT id_поставщика, id_склада, дата_поставки, st.название AS status 
+                                         FROM поставки p 
+                                         JOIN статус st ON p.id_статуса = st.id_статуса 
+                                         WHERE p.id_поставки = @id";
+                    string statusName = "";
+                    using (var cmd = new MySqlCommand(sqlSupply, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                SupplierComboBox.SelectedValue = reader["id_поставщика"];
+                                WarehouseComboBox.SelectedValue = reader["id_склада"];
+                                SupplyDatePicker.SelectedDate = Convert.ToDateTime(reader["дата_поставки"]);
+                                statusName = reader["status"].ToString();
+                            }
+                        }
+                    }
+
+                    string sqlItems = @"SELECT id_товара, количество, закупочная_цена FROM товар_поставка WHERE id_поставки = @id";
+                    using (var cmd = new MySqlCommand(sqlItems, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            int rowNum = 1;
+                            while (reader.Read())
+                            {
+                                Products.Add(new ProductRow
+                                {
+                                    RowNumber = rowNum++,
+                                    ProductId = Convert.ToInt32(reader["id_товара"]),
+                                    Quantity = Convert.ToDecimal(reader["количество"]),
+                                    Price = Convert.ToDecimal(reader["закупочная_цена"])
+                                });
+                            }
+                        }
+                    }
+                    RecalculateTotal();
+                    ConfigureUIForStatus(statusName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки поставки:\n" + ex.Message);
+            }
+        }
+
+        private void ConfigureUIForStatus(string statusName)
+        {
+            StatusTextBlock.Text = statusName;
+
+            if (statusName == "Проведен")
+            {
+                StatusTextBlock.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#16A34A");
+            }
+            else if (statusName == "Отменен")
+            {
+                StatusTextBlock.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#DC2626");
+            }
+
+            if (statusName != "Черновик")
+            {
+                SupplierComboBox.IsEnabled = false;
+                WarehouseComboBox.IsEnabled = false;
+                SupplyDatePicker.IsEnabled = false;
+                ProductsDataGrid.IsReadOnly = true;
+
+                BtnAddProduct.Visibility = Visibility.Collapsed;
+                BtnDeleteProduct.Visibility = Visibility.Collapsed;
+                BtnSaveDraft.Visibility = Visibility.Collapsed;
+                BtnPostSupply.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
             Products.Add(new ProductRow { RowNumber = Products.Count + 1 });
@@ -95,8 +187,8 @@ namespace MyERP.Pages.Supplies
             TotalTextBlock.Text = Products.Sum(p => p.Total).ToString("N2") + " ₽";
         }
 
-        private void SaveDraft_Click(object sender, RoutedEventArgs e) => SaveSupply(1); 
-        private void PostSupply_Click(object sender, RoutedEventArgs e) => SaveSupply(2); 
+        private void SaveDraft_Click(object sender, RoutedEventArgs e) => SaveSupply(1);
+        private void PostSupply_Click(object sender, RoutedEventArgs e) => SaveSupply(2);
 
         private void SaveSupply(int statusId)
         {
@@ -116,17 +208,41 @@ namespace MyERP.Pages.Supplies
                     conn.Open();
                     using (var trans = conn.BeginTransaction())
                     {
-                        string sql = @"INSERT INTO поставки (id_поставщика, id_склада, id_пользователя, id_статуса, дата_поставки) 
-                                       VALUES (@sup, @wh, @user, @status, @date); SELECT LAST_INSERT_ID();";
-                        long supplyId;
-                        using (var cmd = new MySqlCommand(sql, conn, trans))
+                        long supplyId = currentSupplyId;
+
+                        if (currentSupplyId == 0)
                         {
-                            cmd.Parameters.AddWithValue("@sup", SupplierComboBox.SelectedValue);
-                            cmd.Parameters.AddWithValue("@wh", WarehouseComboBox.SelectedValue);
-                            cmd.Parameters.AddWithValue("@user", UserSession.UserId);
-                            cmd.Parameters.AddWithValue("@status", statusId);
-                            cmd.Parameters.AddWithValue("@date", SupplyDatePicker.SelectedDate ?? DateTime.Today);
-                            supplyId = Convert.ToInt64(cmd.ExecuteScalar());
+                            string sql = @"INSERT INTO поставки (id_поставщика, id_склада, id_пользователя, id_статуса, дата_поставки) 
+                                           VALUES (@sup, @wh, @user, @status, @date); SELECT LAST_INSERT_ID();";
+                            using (var cmd = new MySqlCommand(sql, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@sup", SupplierComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@wh", WarehouseComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@user", UserSession.UserId);
+                                cmd.Parameters.AddWithValue("@status", statusId);
+                                cmd.Parameters.AddWithValue("@date", SupplyDatePicker.SelectedDate ?? DateTime.Today);
+                                supplyId = Convert.ToInt64(cmd.ExecuteScalar());
+                            }
+                        }
+                        else
+                        {
+                            string sqlUpdate = @"UPDATE поставки SET id_поставщика=@sup, id_склада=@wh, id_статуса=@status, дата_поставки=@date 
+                                                 WHERE id_поставки=@id";
+                            using (var cmd = new MySqlCommand(sqlUpdate, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@sup", SupplierComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@wh", WarehouseComboBox.SelectedValue);
+                                cmd.Parameters.AddWithValue("@status", statusId);
+                                cmd.Parameters.AddWithValue("@date", SupplyDatePicker.SelectedDate ?? DateTime.Today);
+                                cmd.Parameters.AddWithValue("@id", currentSupplyId);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            using (var cmd = new MySqlCommand("DELETE FROM товар_поставка WHERE id_поставки=@id", conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@id", currentSupplyId);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
 
                         foreach (var row in Products)
@@ -145,7 +261,7 @@ namespace MyERP.Pages.Supplies
                         trans.Commit();
                     }
                 }
-                MessageBox.Show(statusId == 2 ? "Поставка успешно проведена! Остатки обновлены." : "Поставка сохранена как черновик.");
+                MessageBox.Show(statusId == 2 ? "Поставка успешно проведена! Остатки обновлены." : "Поставка сохранена.");
                 NavigationService?.GoBack();
             }
             catch (Exception ex)
@@ -155,5 +271,23 @@ namespace MyERP.Pages.Supplies
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) => NavigationService?.GoBack();
+    }
+
+    public class ProductRow : INotifyPropertyChanged
+    {
+        public int RowNumber { get; set; }
+        private int _prodId; public int ProductId { get => _prodId; set { _prodId = value; Notify(); } }
+        private decimal _qty; public decimal Quantity { get => _qty; set { _qty = value; Notify(); Notify(nameof(Total)); } }
+        private decimal _price; public decimal Price { get => _price; set { _price = value; Notify(); Notify(nameof(Total)); } }
+        public decimal Total => Quantity * Price;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void Notify([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    public class Item
+    {
+        public int Id { get; set; }
+        public string Наименование { get; set; }
+        public decimal Price { get; set; }
     }
 }

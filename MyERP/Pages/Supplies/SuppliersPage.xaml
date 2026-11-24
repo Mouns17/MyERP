@@ -15,7 +15,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Панель поиска и кнопок  -->
         <Grid Grid.Row="0" Margin="0,0,0,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" />
@@ -31,7 +30,6 @@
                     BorderBrush="#D1D5DB"
                     Foreground="#151719"
                     TextChanged="SearchTextBox_TextChanged" />
-
                 <TextBlock
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
@@ -56,14 +54,11 @@
                 Margin="10,0,0,0"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-
                 <Button
                     Margin="10,0,0,0"
                     Click="AddSupplierButton_Click"
                     Content="ДОБАВИТЬ"
                     Style="{StaticResource BtnPrimary}" />
-
-                <!--  Оставил имя SaveProductButton, чтобы не сломать ваш C# код  -->
                 <Button
                     x:Name="SaveProductButton"
                     Margin="10,0,0,0"
@@ -71,7 +66,6 @@
                     Content="СОХРАНИТЬ"
                     Style="{StaticResource BtnSuccess}"
                     Visibility="Collapsed" />
-
                 <Button
                     Margin="10,0,0,0"
                     Click="DeleteSupplierButton_Click"
@@ -80,7 +74,6 @@
             </StackPanel>
         </Grid>
 
-        <!--  Таблица в белой карточке  -->
         <Border
             Grid.Row="1"
             Padding="0"
@@ -113,7 +106,6 @@
                 RowHeight="40"
                 SelectionMode="Single"
                 SelectionUnit="FullRow">
-
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="White" />
@@ -123,7 +115,6 @@
                         <Setter Property="FontSize" Value="13" />
                     </Style>
                 </DataGrid.RowStyle>
-
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#F9FAFB" />
@@ -138,7 +129,6 @@
                         <Setter Property="BorderBrush" Value="#E5E7EB" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
-
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="60"
@@ -153,18 +143,15 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="200"
                         Binding="{Binding Наименование}"
                         Header="Наименование" />
-
                     <DataGridTextColumn
                         Width="150"
                         Binding="{Binding ИНН}"
                         Header="ИНН" />
-
                     <DataGridTemplateColumn Width="170" Header="Телефон">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -181,12 +168,10 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
-
                     <DataGridTextColumn
                         Width="200"
                         Binding="{Binding ЭлПочта}"
                         Header="Эл. Почта" />
-
                     <DataGridTextColumn
                         Width="300"
                         Binding="{Binding Адрес}"
