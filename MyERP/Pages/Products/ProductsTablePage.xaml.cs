@@ -197,18 +197,7 @@ namespace MyERP.Pages.Products
             {
                 connection.Open();
 
-                string query = @"
-            SELECT 
-                id_единицы_измерения AS Id, 
-                CASE наименование
-                    WHEN 'шт' THEN 'Штука (шт)'
-                    WHEN 'кг' THEN 'Килограмм (кг)'
-                    WHEN 'л' THEN 'Литр (л)'
-                    WHEN 'м' THEN 'Метр (м)'
-                    WHEN 'упак' THEN 'Упаковка (упак)'
-                    ELSE наименование
-                END AS Наименование
-            FROM ЕДИНИЦА_ИЗМЕРЕНИЯ";
+                string query = @"SELECT id_единицы_измерения AS Id, CASE наименование WHEN 'шт' THEN 'Штука (шт)' WHEN 'кг' THEN 'Килограмм (кг)' WHEN 'л' THEN 'Литр (л)' WHEN 'м' THEN 'Метр (м)' WHEN 'упак' THEN 'Упаковка (упак)' ELSE наименование END AS Наименование FROM ЕДИНИЦА_ИЗМЕРЕНИЯ";
 
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
                 {
